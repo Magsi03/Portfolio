@@ -1,19 +1,77 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>blablabla</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="style.css"/>
-        <script src="index.js"></script>
-    </head>
-    <body class="flexbox column">
-        <h1>Überschrift</h1>
+<head>
+    <meta charset="utf-8" />
+    <title>Magalis Blog</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <main id="chatbox" class="stretch flexbox column">
-            <div class="messages stretch flexbox column"></div>
-            <input placeholder="Antwort …" />
-        </main>
-    </body>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Klasse Router einbinden -->
+    <script src="router.js"></script>
+
+    <!-- Single Page Router initialisieren -->
+    <script>
+        window.addEventListener("load", () => {
+            /**
+             * Hilfsfunktion zum Umschalten des sichtbaren Inhalts
+             *
+             * @param {String} id HTML-ID des anzuzeigenden <main>-Elements
+             * @param {String} title Neuer Titel für den Browser-Tab
+             */
+            let swapContent = (id, title) => {
+                document.querySelectorAll("main").forEach(mainElement => {
+                    mainElement.classList.add("hidden");
+                })
+
+                let element = document.querySelector(`#${id}`);
+                if (element) element.classList.remove("hidden");
+
+                document.title = `🧭 ${title} | Aufgabe: SPA-Router`;
+            }
+
+            /**
+             * Konfiguration des URL-Routers
+             */
+            let routes = [
+                {
+                    url: "^/$",
+                    show: () => swapContent("page-start", "Startseite"),
+                }, {
+                    url: "^/other/$",
+                    show: () => swapContent("page-other", "Andere Seite"),
+                }, {
+                    url: ".*",
+                    show: () => swapContent("page-not-found", "Seite nicht gefunden"),
+                }
+            ];
+
+            let router = new Router(routes);
+            router.start();
+        });
+    </script>
+
+    <script src="index.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+</head>
+
+<body>
+    <h1>Wilkommen auf meinem Blog :&rpar;</h1>
+
+    <form>
+        <input type="text" name="search" placeholder="Suchbegriff eingeben">
+        <input type="submit" value="Suchen">
+    </form>
+
+    <p>Hier könnt ihr nach Posts und den Kommentaren dazu suchen :&rpar;</p>
+    <p>Viel Spaß dabei &hearts;</p>
+    <div id="errorContainer"></div>
+
+
+</body>
+
 </html>
