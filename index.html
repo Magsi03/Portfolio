@@ -9,67 +9,44 @@
 
     <link rel="stylesheet" href="style.css" />
 
-    <!-- Klasse Router einbinden -->
     <script src="router.js"></script>
-
-    <!-- Single Page Router initialisieren -->
-    <script>
-        window.addEventListener("load", () => {
-            /**
-             * Hilfsfunktion zum Umschalten des sichtbaren Inhalts
-             *
-             * @param {String} id HTML-ID des anzuzeigenden <main>-Elements
-             * @param {String} title Neuer Titel für den Browser-Tab
-             */
-            let swapContent = (id, title) => {
-                document.querySelectorAll("main").forEach(mainElement => {
-                    mainElement.classList.add("hidden");
-                })
-
-                let element = document.querySelector(`#${id}`);
-                if (element) element.classList.remove("hidden");
-
-                document.title = `🧭 ${title} | Aufgabe: SPA-Router`;
-            }
-
-            /**
-             * Konfiguration des URL-Routers
-             */
-            let routes = [
-                {
-                    url: "^/$",
-                    show: () => swapContent("page-start", "Startseite"),
-                }, {
-                    url: "^/other/$",
-                    show: () => swapContent("page-other", "Andere Seite"),
-                }, {
-                    url: ".*",
-                    show: () => swapContent("page-not-found", "Seite nicht gefunden"),
-                }
-            ];
-
-            let router = new Router(routes);
-            router.start();
-        });
-    </script>
-
     <script src="index.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
+
 </head>
 
 <body>
-    <h1>Wilkommen auf meinem Blog :&rpar;</h1>
+    <header>
+        <h1>Wilkommen auf meinem Blog :&rpar;</h1>
+    </header>
 
-    <form>
-        <input type="text" name="search" placeholder="Suchbegriff eingeben">
-        <input type="submit" value="Suchen">
-    </form>
+    <main id="content">
+        <section id="searchPage">
+            <form id="searchForm">
+                <input type="text" name="search" placeholder="Suchbegriff eingeben">
+                <input type="submit" value="Suchen">
+            </form>
+            <p>Hier könnt ihr nach Posts und den Kommentaren dazu suchen :&rpar;</p>
+            <p>Viel Spaß dabei &hearts;</p>
+            <div id="errorContainer"></div>
+            <div id="searchResults"></div>
+        </section>
 
-    <p>Hier könnt ihr nach Posts und den Kommentaren dazu suchen :&rpar;</p>
-    <p>Viel Spaß dabei &hearts;</p>
-    <div id="errorContainer"></div>
+        <section id="detailPage">
+            <h2 id="detailTitle"></h2>
+            <p id="detailContent"></p>
+            <h3>Kommentare:</h3>
+            <ul id="commentList"></ul>
+            <a href="#" id="backButton">Zurück zur Suche</a>
+        </section>
+    </main>
+
+
+    <footer>
+        <p>&copy; 2023 Magalis Blog - Alle Rechte vorbehalten</p>
+        <p>Kontakt: magali.behler@web.de</p>
+    </footer>
+
 
 
 </body>

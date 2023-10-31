@@ -1,115 +1,120 @@
-$(document).ready(function() {
-    // Das DOM ist bereit, um mit JavaScript zu interagieren
-  
-    // Event-Handler für das Absenden des Formulars
-    $('form').submit(function(event) {
-      event.preventDefault(); // Verhindert das Neuladen der Seite nach dem Absenden des Formulars
-  
-      var searchQuery = $('input[name="search"]').val(); // Suchbegriff aus dem Eingabefeld abrufen
-  
-      searchPosts(searchQuery);
-    });
-  
-    // Funktion zum Suchen der Posts
-    function searchPosts(searchQuery) {
-      // AJAX-Anfrage an die Dummy JSON-API senden
-      $.ajax({
-        url: 'https://dummyjson.com/api/posts',
-        method: 'GET',
-        dataType: 'json',
-        data: { search: searchQuery },
-        success: function(response) {
-            // Erfolgreiche Antwort von der API erhalten -> Ergebnisse anzeigen
-            var posts = response.posts;
-          
-            // Container für die Suchergebnisse
-            var searchResultsContainer = $('#searchResults');
-            searchResultsContainer.empty(); // Vorherige Suchergebnisse löschen
-          
-            // Schleife über die gefundenen Posts
-            for (var i = 0; i < posts.length; i++) {
-              var post = posts[i];
-          
-              // HTML-Elemente für den Post und seine Kommentare erstellen
-              var postElement = $('<div class="post"></div>');
-              var postTitle = $('<h2>' + post.title + '</h2>');
-              var postContent = $('<p>' + post.content + '</p>');
-          
-              // Füge den Post-Titel und den Inhalt zum Post-Element hinzu
-              postElement.append(postTitle);
-              postElement.append(postContent);
-          
-              // Überprüfe, ob der Post Kommentare hat
-              if (post.comments && post.comments.length > 0) {
-                var commentsContainer = $('<div class="comments"></div>');
-          
-                // Schleife über die Kommentare des Posts
-                for (var j = 0; j < post.comments.length; j++) {
-                  var comment = post.comments[j];
-                  var commentElement = $('<div class="comment"></div>');
-                  var commentText = $('<p>' + comment.text + '</p>');
-          
-                  // Füge den Kommentar zum Kommentar-Element hinzu
-                  commentElement.append(commentText);
-                  commentsContainer.append(commentElement);
-                }
-          
-                // Füge den Kommentar-Container zum Post-Element hinzu
-                postElement.append(commentsContainer);
-              }
-          
-              // Füge den fertigen Post zur Suchergebnis-Anzeige hinzu
-              searchResultsContainer.append(postElement);
-            }
-          },
-          error: function() {
-            // Fehler beim Abrufen der Daten von der API
-            // Hier wird eine Fehlermeldung auf der Webseite angezeigt
-            var errorMessage = $('<p>Es ist ein Fehler beim Abrufen der Daten aufgetreten. Bitte versuchen Sie es später erneut.</p>');
-            $('#errorContainer').empty().append(errorMessage);
-          }
-      });
-    }
-  
-    // Funktion zum Anzeigen der Suchergebnisse
-    function showSearchResults(posts) {
-      var searchResultsContainer = $('#searchResults');
-      searchResultsContainer.empty(); // Vorherige Suchergebnisse löschen
-  
-      // Schleife über die gefundenen Posts
-      for (var i = 0; i < posts.length; i++) {
-        var post = posts[i];
-  
-        // HTML-Elemente für den Post und seine Kommentare erstellen
-        var postElement = $('<div class="post"></div>');
-        var postTitle = $('<h2>' + post.title + '</h2>');
-        var postContent = $('<p>' + post.content + '</p>');
-  
-        // Füge den Post-Titel und den Inhalt zum Post-Element hinzu
-        postElement.append(postTitle);
-        postElement.append(postContent);
-  
-        // Überprüfe, ob der Post Kommentare hat
-        if (post.comments && post.comments.length > 0) {
-          var commentsContainer = $('<div class="comments"></div>');
-  
-          // Schleife über die Kommentare des Posts
-          for (var j = 0; j < post.comments.length; j++) {
-            var comment = post.comments[j];
-            var commentElement = $('<div class="comment"></div>');
-            var commentText = $('<p>' + comment.text + '</p>');
-  
-            // Füge den Kommentar zum Kommentar-Element hinzu
-            commentElement.append(commentText);
-            commentsContainer.append(commentElement);
-          }
-  
-          // Füge den Kommentar-Container zum Post-Element hinzu
-          postElement.append(commentsContainer);
-        }
-  
-        // Füge den fertigen Post zur Suchergebnis-Anzeige hinzu
-        searchResultsContainer.append(postElement);
+
+const router = new Router();
+
+// Routen definieren
+router.addRoute("/", searchPage);
+router.addRoute("/results", resultsPage);
+router.addRoute("/detail", detailPage);
+
+
+function searchPage() {
+  const searchForm = document.getElementById("searchForm");
+
+  searchForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const searchTerm = searchForm.search.value;
+
+    try {
+      const response = await fetch(`https://dummyjson.com/posts/search?q=${searchTerm}`);
+      const data = await response.json();
+
+      if (data.length > 0) {
+        showSearchResults(data);
+      } else {
+        showError("Keine Ergebnisse gefunden.");
       }
+    } catch (error) {
+      showError("Fehler beim Abrufen der Suchergebnisse.");
     }
   });
+}
+function resultsPage(results) {
+  const resultsTitle = document.getElementById("resultsTitle");
+  const searchResults = document.getElementById("searchResults");
+
+  resultsTitle.textContent = "Suchergebnisse";
+  searchResults.innerHTML = "";
+
+  results.forEach((result) => {
+    const resultItem = document.createElement("div");
+    resultItem.classList.add("result-item");
+
+    const title = document.createElement("h3");
+    title.textContent = result.title;
+
+    const description = document.createElement("p");
+    description.textContent = result.description;
+
+    resultItem.appendChild(title);
+    resultItem.appendChild(description);
+
+    searchResults.appendChild(resultItem);
+  });
+}
+/*
+function showSearchResults(results) {
+  const searchResultsContainer = document.getElementById("searchResults");
+  searchResultsContainer.innerHTML = "";
+
+  results.forEach((result) => {
+    const resultLink = document.createElement("a");
+    resultLink.href = `#detail?id=${result.id}`;
+    resultLink.textContent = result.title;
+
+    searchResultsContainer.appendChild(resultLink);
+    searchResultsContainer.appendChild(document.createElement("br"));
+  });
+}*/
+
+// Funktion für die Detailseite
+async function detailPage(matches) {
+  const detailPageContainer = document.getElementById("detailPage");
+  detailPageContainer.innerHTML = "";
+
+  const postId = matches.params.id;
+
+  try {
+    const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
+    const postData = await postResponse.json();
+
+    const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
+    const commentsData = await commentsResponse.json();
+
+    showPostDetails(postData, commentsData);
+  } catch (error) {
+    showError("Fehler beim Abrufen der Detaildaten.");
+  }
+}
+
+function showPostDetails(post, comments) {
+  const detailPageContainer = document.getElementById("detailPage");
+
+  const detailTitle = document.createElement("h2");
+  detailTitle.textContent = post.title;
+
+  const detailContent = document.createElement("p");
+  detailContent.textContent = post.content;
+
+  const commentList = document.createElement("ul");
+  comments.forEach((comment) => {
+    const commentItem = document.createElement("li");
+    commentItem.textContent = comment.text;
+    commentList.appendChild(commentItem);
+  });
+
+  detailPageContainer.appendChild(detailTitle);
+  detailPageContainer.appendChild(detailContent);
+  detailPageContainer.appendChild(document.createElement("hr"));
+  detailPageContainer.appendChild(commentList);
+}
+
+// Funktion zum Anzeigen von Fehlermeldungen
+function showError(message) {
+  const errorContainer = document.getElementById("errorContainer");
+  errorContainer.textContent = message;
+}
+
+// Event-Listener für das Laden der Seite und das Ändern der URL
+window.addEventListener("DOMContentLoaded", router.handleRouting.bind(router));
+window.addEventListener("hashchange", router.handleRouting.bind(router));

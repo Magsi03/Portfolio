@@ -1,4 +1,4 @@
-class Router {
+/*class Router {
 
     _handleRouting() {
         let url = location.hash.slice(1);
@@ -18,3 +18,44 @@ class Router {
         route.show(matches);
     }
 }
+*/
+ class Router {
+    constructor() {
+      this.routes = {};
+      this.currentRoute = "";
+    }
+  
+    addRoute(route, handler) {
+      this.routes[route] = handler;
+    }
+  
+    handleRouting() {
+      const hash = window.location.hash.slice(1);
+      const routeParams = this.parseRouteParams(hash);
+  
+      if (this.routes[hash]) {
+        this.currentRoute = hash;
+        this.routes[hash](routeParams);
+      } else {
+        // Fallback: Zeige die Startseite an
+        this.currentRoute = "/";
+        this.routes["/"](routeParams);
+      }
+    }
+  
+    parseRouteParams(route) {
+      const params = {};
+      const paramRegex = /:(\w+)/g;
+      const matches = route.match(paramRegex);
+  
+      if (matches) {
+        matches.forEach((match) => {
+          const paramName = match.slice(1);
+          params[paramName] = routeParams[paramName];
+        });
+      }
+  
+      return params;
+    }
+    
+  }
