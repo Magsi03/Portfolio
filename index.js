@@ -6,8 +6,24 @@ router.addRoute("/", searchPage);
 router.addRoute("/results", resultsPage);
 router.addRoute("/detail", detailPage);
 
+//globale Variable um die Suchergebnisse abzuspeichern
+results = [];
+
+/**
+ * Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
+ * @param {string} idVisible ID der anzuzeigenden <section> 
+ */
+function switchVisibleSection(idVisible) {
+  document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
+
+  let sectionElement = document.getElementById(idVisible);
+  if (sectionElement) sectionElement.classList.remove("hidden");
+}
 
 function searchPage() {
+
+  switchVisibleSection("searchPage");
+
   const searchForm = document.getElementById("searchForm");
 
   searchForm.addEventListener("submit", async (event) => {
@@ -19,17 +35,22 @@ function searchPage() {
       const response = await fetch(`https://dummyjson.com/posts/search?q=${searchTerm}`);
       const data = await response.json();
 
-      if (data.length > 0) {
-        showSearchResults(data);
+      if (data?.posts?.length > 0) {
+        results = data.posts;
+        location.hash = "/results";
       } else {
         showError("Keine Ergebnisse gefunden.");
       }
     } catch (error) {
-      showError("Fehler beim Abrufen der Suchergebnisse.");
+      showError("Fehler beim Abrufen der Suchergebnisse.", error);
     }
   });
 }
-function resultsPage(results) {
+
+//Funktion für die Ergebnisseite
+function resultsPage() {
+  switchVisibleSection("resultPage");
+
   const resultsTitle = document.getElementById("resultsTitle");
   const searchResults = document.getElementById("searchResults");
 
@@ -49,26 +70,25 @@ function resultsPage(results) {
     resultItem.appendChild(title);
     resultItem.appendChild(description);
 
+    // Klick-Event für den Detail-Link hinzufügen
+    resultItem.addEventListener("click", () => {
+      navigateToDetail(result.id);
+    });
+
     searchResults.appendChild(resultItem);
   });
+  function navigateToDetail(id) {
+    location.hash = `/detail/${id}`;
+  }
+  
+  /*const resultPage = document.getElementById("resultPage");
+  resultPage.classList.remove("hidden");*/
 }
-/*
-function showSearchResults(results) {
-  const searchResultsContainer = document.getElementById("searchResults");
-  searchResultsContainer.innerHTML = "";
-
-  results.forEach((result) => {
-    const resultLink = document.createElement("a");
-    resultLink.href = `#detail?id=${result.id}`;
-    resultLink.textContent = result.title;
-
-    searchResultsContainer.appendChild(resultLink);
-    searchResultsContainer.appendChild(document.createElement("br"));
-  });
-}*/
 
 // Funktion für die Detailseite
 async function detailPage(matches) {
+  switchVisibleSection("detailPage");
+
   const detailPageContainer = document.getElementById("detailPage");
   detailPageContainer.innerHTML = "";
 
@@ -83,7 +103,7 @@ async function detailPage(matches) {
 
     showPostDetails(postData, commentsData);
   } catch (error) {
-    showError("Fehler beim Abrufen der Detaildaten.");
+    showError("Fehler beim Abrufen der Detaildaten.", error);
   }
 }
 
@@ -110,7 +130,8 @@ function showPostDetails(post, comments) {
 }
 
 // Funktion zum Anzeigen von Fehlermeldungen
-function showError(message) {
+function showError(message, error) {
+  if (error) console.error(error);
   const errorContainer = document.getElementById("errorContainer");
   errorContainer.textContent = message;
 }

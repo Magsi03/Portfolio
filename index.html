@@ -17,11 +17,11 @@
 
 <body>
     <header>
-        <h1>Wilkommen auf meinem Blog :&rpar;</h1>
+        <h1>Willkommen auf meinem Blog :&rpar;</h1>
     </header>
 
     <main id="content">
-        <section id="searchPage">
+        <section id="searchPage" class="hidden">
             <form id="searchForm">
                 <input type="text" name="search" placeholder="Suchbegriff eingeben">
                 <input type="submit" value="Suchen">
@@ -32,7 +32,12 @@
             <div id="searchResults"></div>
         </section>
 
-        <section id="detailPage">
+        <section id="resultPage" class="hidden">
+            <h2 id="resultsTitle">Hier die passenden Ergebnisse:</h2>
+            <div id="searchResults"></div>
+        </section>
+
+        <section id="detailPage" class="hidden">
             <h2 id="detailTitle"></h2>
             <p id="detailContent"></p>
             <h3>Kommentare:</h3>
