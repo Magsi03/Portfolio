@@ -1,100 +1,168 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
+html,
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    background-image: url("Blog_Background1.jpeg");
-    background-size: cover;
-    background-position: center;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  background-image: url("Blog_Background1.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 h1 {
-    font-size: 36px;
-    margin-bottom: 40px;
+  font-size: 36px;
+  margin-bottom: 40px;
 }
 
 form {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 input[type="text"] {
-    padding: 10px;
-    width: 300px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 input[type="submit"] {
-    padding: 10px 20px;
-    background-color: #337ab7;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #337ab7;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 p {
-    padding-top: 15px;
-    margin-bottom: 10px;
+  padding-top: 15px;
+  margin-bottom: 10px;
 }
 
-/*@media screen and (max-width: 768px) {
-    h1 {
-      font-size: 24px;
-    }
-    
-    p {
-      font-size: 14px;
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    h1 {
-      font-size: 20px;
-    }
-    
-    p {
-      font-size: 12px;
-    }
-  } */
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 0.1;
+  margin-top: 10px;
+}
 
+.result-container {
+  padding: 20px;
+}
 
-  footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
-    line-height: 0.1;
-    margin-top: 10px;
+.result-item {
+  border-bottom: 1px solid #cccccc;
+  padding: 3px 0;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.result-item:hover {
+  background-color: #f5f5f5;
+}
+
+.result-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.result-description {
+  font-size: 14px;
+  color: #555555;
+}
+
+/* Responsive Stile */
+@media screen and (max-width: 600px) {
+  .result-container {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   }
-  .result-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-  }
-  
-  .result-item:hover {
-    background-color: #f5f5f5;
-  }
-  
+}
+
 #errorContainer {
-    color: red;
-    font-weight: bold;
+  display: none;
+  color: red;
+  font-weight: bold;
+  margin-top: 50px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* Detailseite-Stile */
+.detail-container {
+  padding: 20px;
+}
+
+.post-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.post-content {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.comment-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #555555;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  color: black;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  color: white;
+  background-color: #337ab7;
+}
+
+.button:focus {
+  outline: none;
 }

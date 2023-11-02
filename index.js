@@ -1,10 +1,23 @@
 
-const router = new Router();
+window.addEventListener("load", () => {
+  const router = new Router([
+    {
+      url: "^/$",
+      show: searchPage,
+    },
+    {
+      url: "^/results$",
+      show: resultsPage,
+    },
+    {
+      url: "^/detail/(.*)$",
+      show: detailPage,
+    }
+  ]);
+  
+  router.start();  
+});
 
-// Routen definieren
-router.addRoute("/", searchPage);
-router.addRoute("/results", resultsPage);
-router.addRoute("/detail", detailPage);
 
 //globale Variable um die Suchergebnisse abzuspeichern
 results = [];
@@ -20,6 +33,7 @@ function switchVisibleSection(idVisible) {
   if (sectionElement) sectionElement.classList.remove("hidden");
 }
 
+//Funktion für die Suchseite (Startseite)
 function searchPage() {
 
   switchVisibleSection("searchPage");
@@ -45,6 +59,39 @@ function searchPage() {
       showError("Fehler beim Abrufen der Suchergebnisse.", error);
     }
   });
+  
+}
+
+//Funktion um zur Detailseite navigieren zu können
+function navigateToDetail(id) {
+  location.hash = `/detail/${id}`;
+}
+
+// Funktion zum Zurücknavigieren zur Suchseite
+function navigateToSearch() {
+  location.hash = "/"; // oder die entsprechende Route für die Suchseite
+}
+
+// Event-Listener für den Zurück-Button
+const backButton = document.getElementById("backButton");
+if (backButton) {
+  backButton.addEventListener("click", navigateToSearch);
+}
+// Funktion zum Erstellen des Zurück-Buttons
+function createBackButton() {
+  const backButton = document.createElement("a");
+  backButton.href = "#";
+  backButton.id = "backButton";
+  backButton.classList.add("button");
+  backButton.textContent = "Zurück zur Suche";
+
+  backButton.addEventListener("click", navigateToSearch);
+
+  const backButtonContainer = document.createElement("div");
+  backButtonContainer.id = "backButtonContainer";
+  backButtonContainer.appendChild(backButton);
+
+  document.body.insertBefore(backButtonContainer, document.body.firstChild);
 }
 
 //Funktion für die Ergebnisseite
@@ -52,19 +99,21 @@ function resultsPage() {
   switchVisibleSection("resultPage");
 
   const resultsTitle = document.getElementById("resultsTitle");
-  const searchResults = document.getElementById("searchResults");
+  const resultContainer = document.getElementById("resultContainer");
 
-  resultsTitle.textContent = "Suchergebnisse";
-  searchResults.innerHTML = "";
+  resultsTitle.textContent = "Hier die passenden Ergebnisse (weitere Infos durch auswählen eines Posts):";
+  resultContainer.innerHTML = "";
 
   results.forEach((result) => {
     const resultItem = document.createElement("div");
     resultItem.classList.add("result-item");
 
     const title = document.createElement("h3");
+    title.classList.add("result-title");
     title.textContent = result.title;
 
     const description = document.createElement("p");
+    description.classList.add("result-description");
     description.textContent = result.description;
 
     resultItem.appendChild(title);
@@ -75,24 +124,27 @@ function resultsPage() {
       navigateToDetail(result.id);
     });
 
-    searchResults.appendChild(resultItem);
+    resultContainer.appendChild(resultItem);
   });
-  function navigateToDetail(id) {
-    location.hash = `/detail/${id}`;
-  }
-  
-  /*const resultPage = document.getElementById("resultPage");
-  resultPage.classList.remove("hidden");*/
+  createBackButton(); // Button erstellen und anzeigen
+
+  const resultPage = document.getElementById("resultPage");
+  resultPage.classList.remove("hidden");
 }
+
 
 // Funktion für die Detailseite
 async function detailPage(matches) {
   switchVisibleSection("detailPage");
 
+  /*const detailTitle = document.getElementById("detailTitle");
+  const detailContent = document.getElementById("detailContent");
+  const commentList = document.getElementById("commentList");*/
+
   const detailPageContainer = document.getElementById("detailPage");
   detailPageContainer.innerHTML = "";
 
-  const postId = matches.params.id;
+  const postId = matches[1];
 
   try {
     const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
@@ -102,11 +154,16 @@ async function detailPage(matches) {
     const commentsData = await commentsResponse.json();
 
     showPostDetails(postData, commentsData);
+    
+
+    createBackButton(); // Button erstellen und anzeigen
+    
   } catch (error) {
     showError("Fehler beim Abrufen der Detaildaten.", error);
   }
 }
 
+//
 function showPostDetails(post, comments) {
   const detailPageContainer = document.getElementById("detailPage");
 
@@ -129,13 +186,19 @@ function showPostDetails(post, comments) {
   detailPageContainer.appendChild(commentList);
 }
 
-// Funktion zum Anzeigen von Fehlermeldungen
+// Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
-  if (error) console.error(error);
   const errorContainer = document.getElementById("errorContainer");
-  errorContainer.textContent = message;
-}
+  const errorText = document.createElement("p");
+  errorText.textContent = message;
 
-// Event-Listener für das Laden der Seite und das Ändern der URL
-window.addEventListener("DOMContentLoaded", router.handleRouting.bind(router));
-window.addEventListener("hashchange", router.handleRouting.bind(router));
+  errorContainer.innerHTML = "";
+  errorContainer.appendChild(errorText);
+
+  // Fehlercontainer ein- oder ausblenden
+  if (message) {
+    errorContainer.classList.remove("hidden");
+  } else {
+    errorContainer.classList.add("hidden");
+  }
+}
