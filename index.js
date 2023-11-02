@@ -1,4 +1,6 @@
 
+
+//Router konfigurieren und starten
 window.addEventListener("load", () => {
   const router = new Router([
     {
@@ -77,24 +79,8 @@ const backButton = document.getElementById("backButton");
 if (backButton) {
   backButton.addEventListener("click", navigateToSearch);
 }
-// Funktion zum Erstellen des Zurück-Buttons
-function createBackButton() {
-  const backButton = document.createElement("a");
-  backButton.href = "#";
-  backButton.id = "backButton";
-  backButton.classList.add("button");
-  backButton.textContent = "Zurück zur Suche";
 
-  backButton.addEventListener("click", navigateToSearch);
-
-  const backButtonContainer = document.createElement("div");
-  backButtonContainer.id = "backButtonContainer";
-  backButtonContainer.appendChild(backButton);
-
-  document.body.insertBefore(backButtonContainer, document.body.firstChild);
-}
-
-//Funktion für die Ergebnisseite
+/*//Funktion für die Ergebnisseite
 function resultsPage() {
   switchVisibleSection("resultPage");
 
@@ -131,15 +117,49 @@ function resultsPage() {
   const resultPage = document.getElementById("resultPage");
   resultPage.classList.remove("hidden");
 }
+*/
 
+function resultsPage() {
+  switchVisibleSection("resultPage");
 
+  const resultsTitle = document.getElementById("resultsTitle");
+  const resultContainer = document.getElementById("resultContainer");
+
+  resultsTitle.textContent = "Hier die passenden Ergebnisse (weitere Infos durch Auswählen eines Posts):";
+  resultContainer.innerHTML = "";
+
+  results.forEach((result) => {
+    const resultItem = document.createElement("div");
+    resultItem.classList.add("result-item");
+
+    const title = document.createElement("h3");
+    title.classList.add("result-title");
+    title.textContent = result.title;
+
+    const description = document.createElement("p");
+    description.classList.add("result-description");
+    description.textContent = result.description;
+
+    resultItem.appendChild(title);
+    resultItem.appendChild(description);
+
+    // Klick-Event für den Detail-Link hinzufügen
+    resultItem.addEventListener("click", () => {
+      navigateToDetail(result.id);
+    });
+
+    resultContainer.appendChild(resultItem);
+  });
+
+  createBackButton(); // Button erstellen und anzeigen
+}
 // Funktion für die Detailseite
-async function detailPage(matches) {
+/*async function detailPage(matches) {
   switchVisibleSection("detailPage");
 
-  /*const detailTitle = document.getElementById("detailTitle");
+  const detailTitle = document.getElementById("detailTitle");
   const detailContent = document.getElementById("detailContent");
-  const commentList = document.getElementById("commentList");*/
+  const commentList = document.getElementById("commentList");
 
   const detailPageContainer = document.getElementById("detailPage");
   detailPageContainer.innerHTML = "";
@@ -161,8 +181,43 @@ async function detailPage(matches) {
   } catch (error) {
     showError("Fehler beim Abrufen der Detaildaten.", error);
   }
-}
+}*/
+async function detailPage(matches) {
+  switchVisibleSection("detailPage");
 
+  const detailTitle = document.getElementById("detailTitle");
+  const detailContent = document.getElementById("detailContent");
+  const commentList = document.getElementById("commentList");
+
+  const postId = matches[1];
+
+  try {
+    const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
+    const postData = await postResponse.json();
+
+    const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
+    const commentsData = await commentsResponse.json();
+
+    detailTitle.textContent = postData.title;
+    detailContent.innerHTML = `
+      <p>${postData.body}</p>
+      <p>Tags: ${postData.tags.join(", ")}</p>
+      <p>Nutzer-ID: ${postData.userId}</p>
+      <p>Reaktionen: ${postData.reactions}</p>
+    `;
+
+    commentList.innerHTML = "";
+    commentsData.forEach((comment) => {
+      const commentItem = document.createElement("li");
+      commentItem.textContent = comment.text;
+      commentList.appendChild(commentItem);
+    });
+
+    createBackButton(); // Button erstellen und anzeigen
+  } catch (error) {
+    showError("Fehler beim Abrufen der Detaildaten.", error);
+  }
+}
 //
 function showPostDetails(post, comments) {
   const detailPageContainer = document.getElementById("detailPage");
@@ -197,8 +252,8 @@ function showError(message, error) {
 
   // Fehlercontainer ein- oder ausblenden
   if (message) {
-    errorContainer.classList.remove("hidden");
+    errorContainer.style.display = "block";
   } else {
-    errorContainer.classList.add("hidden");
+    errorContainer.style.display = "none";
   }
 }
