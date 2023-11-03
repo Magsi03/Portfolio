@@ -180,3 +180,11 @@ footer {
   background-color: #f5f5f5;
   border-radius: 5px;
 }
+
+#resultPage{
+  padding-bottom: 78px;
+}
+
+#detailPage{
+  padding-bottom: 78px;
+}
