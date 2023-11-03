@@ -133,7 +133,7 @@ async function detailPage(matches) {
 
     const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
     const commentsData = await commentsResponse.json();
-
+console.log(commentsData);
     detailTitle.textContent = postData.title;
     detailContent.innerHTML = `
       <p>${postData.body}</p>
@@ -161,42 +161,23 @@ async function detailPage(matches) {
     commentList.innerHTML = "";
     commentsData.forEach((comment) => {
       const commentItem = document.createElement("li");
-      commentItem.innerHTML = `
+      commentItem.textContent=comment.body;
+     // console.log(commentsItem)
+     /* commentItem.innerHTML = `
       <p>ID: ${comment.id}</p>
       <p>Body: ${comment.body}</p>
       <p>Benutzername: ${comment.user.username}</p> 
-      `;
+      `*/
       //commentItem.textContent = comment.text;
       commentList.appendChild(commentItem);
     });
 
-    createBackButton(); // Button erstellen und anzeigen
+   // createBackButton(); // Button erstellen und anzeigen
   } catch (error) {
-    showError("Fehler beim Abrufen der Detaildaten.", error);
+    showDetailError("Fehler beim Abrufen der Detaildaten.", error);
   }
 }
-//
-function showPostDetails(post, comments) {
-  const detailPageContainer = document.getElementById("detailPage");
 
-  const detailTitle = document.createElement("h2");
-  detailTitle.textContent = post.title;
-
-  const detailContent = document.createElement("p");
-  detailContent.textContent = post.content;
-
-  const commentList = document.createElement("ul");
-  comments.forEach((comment) => {
-    const commentItem = document.createElement("li");
-    commentItem.textContent = comment.text;
-    commentList.appendChild(commentItem);
-  });
-
-  detailPageContainer.appendChild(detailTitle);
-  detailPageContainer.appendChild(detailContent);
-  detailPageContainer.appendChild(document.createElement("hr"));
-  detailPageContainer.appendChild(commentList);
-}
 
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
@@ -208,6 +189,19 @@ function showError(message, error) {
   errorContainer.appendChild(errorText);
 
   // Fehlercontainer ein- oder ausblenden
+  if (message) {
+    errorContainer.style.display = "block";
+  } else {
+    errorContainer.style.display = "none";
+  }
+}
+function showDetailError(message, error){
+  const detailErrorContainer = document.getElementById("detailErrorContainer");
+  const detailErrorText = document.createElement("p");
+  errorText.textContent=message;
+
+  detailErrorContainer.appendChild(detailErrorText);
+
   if (message) {
     errorContainer.style.display = "block";
   } else {
