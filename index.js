@@ -151,37 +151,7 @@ function resultsPage() {
     resultContainer.appendChild(resultItem);
   });
 
-  createBackButton(); // Button erstellen und anzeigen
 }
-// Funktion für die Detailseite
-/*async function detailPage(matches) {
-  switchVisibleSection("detailPage");
-
-  const detailTitle = document.getElementById("detailTitle");
-  const detailContent = document.getElementById("detailContent");
-  const commentList = document.getElementById("commentList");
-
-  const detailPageContainer = document.getElementById("detailPage");
-  detailPageContainer.innerHTML = "";
-
-  const postId = matches[1];
-
-  try {
-    const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
-    const postData = await postResponse.json();
-
-    const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
-    const commentsData = await commentsResponse.json();
-
-    showPostDetails(postData, commentsData);
-    
-
-    createBackButton(); // Button erstellen und anzeigen
-    
-  } catch (error) {
-    showError("Fehler beim Abrufen der Detaildaten.", error);
-  }
-}*/
 async function detailPage(matches) {
   switchVisibleSection("detailPage");
 
@@ -206,10 +176,31 @@ async function detailPage(matches) {
       <p>Reaktionen: ${postData.reactions}</p>
     `;
 
+    /*commentList.innerHTML = "";
+    commentsData.forEach((comment) => {
+      const commentItem = document.createElement("li");
+      const commentId = document.createElement("p");
+      commentId.textContent = `ID: ${comment.id}`;
+      const commentBody = document.createElement("p");
+      commentBody.textContent = `Body: ${comment.body}`;
+      const commentUsername = document.createElement("p");
+      commentUsername.textContent = `Benutzername: ${comment.user.username}`;
+
+      commentItem.appendChild(commentId);
+      commentItem.appendChild(commentBody);
+      commentItem.appendChild(commentUsername);
+
+      commentList.appendChild(commentItem);
+    });*/
     commentList.innerHTML = "";
     commentsData.forEach((comment) => {
       const commentItem = document.createElement("li");
-      commentItem.textContent = comment.text;
+      commentItem.innerHTML = `
+      <p>ID: ${comment.id}</p>
+      <p>Body: ${comment.body}</p>
+      <p>Benutzername: ${comment.user.username}</p> 
+      `;
+      //commentItem.textContent = comment.text;
       commentList.appendChild(commentItem);
     });
 
