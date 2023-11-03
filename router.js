@@ -57,6 +57,7 @@ class Router {
             return;
         }
 
+        
         route.show(matches);
     }
 }

@@ -80,45 +80,7 @@ if (backButton) {
   backButton.addEventListener("click", navigateToSearch);
 }
 
-/*//Funktion für die Ergebnisseite
-function resultsPage() {
-  switchVisibleSection("resultPage");
-
-  const resultsTitle = document.getElementById("resultsTitle");
-  const resultContainer = document.getElementById("resultContainer");
-
-  resultsTitle.textContent = "Hier die passenden Ergebnisse (weitere Infos durch auswählen eines Posts):";
-  resultContainer.innerHTML = "";
-
-  results.forEach((result) => {
-    const resultItem = document.createElement("div");
-    resultItem.classList.add("result-item");
-
-    const title = document.createElement("h3");
-    title.classList.add("result-title");
-    title.textContent = result.title;
-
-    const description = document.createElement("p");
-    description.classList.add("result-description");
-    description.textContent = result.description;
-
-    resultItem.appendChild(title);
-    resultItem.appendChild(description);
-
-    // Klick-Event für den Detail-Link hinzufügen
-    resultItem.addEventListener("click", () => {
-      navigateToDetail(result.id);
-    });
-
-    resultContainer.appendChild(resultItem);
-  });
-  createBackButton(); // Button erstellen und anzeigen
-
-  const resultPage = document.getElementById("resultPage");
-  resultPage.classList.remove("hidden");
-}
-*/
-
+//Funktion für die Ergebnisseite
 function resultsPage() {
   switchVisibleSection("resultPage");
 
@@ -150,6 +112,10 @@ function resultsPage() {
 
     resultContainer.appendChild(resultItem);
   });
+  /*createBackButton(); // Button erstellen und anzeigen
+
+  const resultPage = document.getElementById("resultPage");
+  resultPage.classList.remove("hidden");*/
 
 }
 async function detailPage(matches) {
