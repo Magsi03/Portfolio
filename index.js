@@ -1,9 +1,6 @@
-
-
 //Router konfigurieren und starten
 window.addEventListener("load", () => {
-  const router = new Router([
-    {
+  const router = new Router([{
       url: "^/$",
       show: searchPage,
     },
@@ -14,11 +11,16 @@ window.addEventListener("load", () => {
     {
       url: "^/detail/(.*)$",
       show: detailPage,
+    },
+    {
+      url: "^/user/(.*)$",
+      show: userPage,
     }
   ]);
-  
-  router.start();  
+
+  router.start();
 });
+
 
 
 //globale Variable um die Suchergebnisse abzuspeichern
@@ -61,7 +63,7 @@ function searchPage() {
       showError("Fehler beim Abrufen der Suchergebnisse.", error);
     }
   });
-  
+
 }
 
 //Funktion um zur Detailseite navigieren zu können
@@ -112,10 +114,9 @@ function resultsPage() {
 
     resultContainer.appendChild(resultItem);
   });
-  /*createBackButton(); // Button erstellen und anzeigen
 
-  const resultPage = document.getElementById("resultPage");
-  resultPage.classList.remove("hidden");*/
+  /* const resultPage = document.getElementById("resultPage");
+   resultPage.classList.remove("hidden");*/
 
 }
 async function detailPage(matches) {
@@ -123,7 +124,7 @@ async function detailPage(matches) {
 
   const detailTitle = document.getElementById("detailTitle");
   const detailContent = document.getElementById("detailContent");
-  const commentList = document.getElementById("commentList");
+  //const commentList = document.getElementById("commentList");
 
   const postId = matches[1];
 
@@ -131,51 +132,97 @@ async function detailPage(matches) {
     const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
     const postData = await postResponse.json();
 
-    const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
-    const commentsData = await commentsResponse.json();
-console.log(commentsData);
+    // const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
+    //const commentsData = await commentsResponse.json();
+    // console.log(commentsData);
     detailTitle.textContent = postData.title;
     detailContent.innerHTML = `
       <p>${postData.body}</p>
       <p>Tags: ${postData.tags.join(", ")}</p>
       <p>Nutzer-ID: ${postData.userId}</p>
+      <button onclick="navigateToUser('${postData.userId}')">Zum Autor</button>
       <p>Reaktionen: ${postData.reactions}</p>
     `;
 
-    /*commentList.innerHTML = "";
-    commentsData.forEach((comment) => {
-      const commentItem = document.createElement("li");
-      const commentId = document.createElement("p");
-      commentId.textContent = `ID: ${comment.id}`;
-      const commentBody = document.createElement("p");
-      commentBody.textContent = `Body: ${comment.body}`;
-      const commentUsername = document.createElement("p");
-      commentUsername.textContent = `Benutzername: ${comment.user.username}`;
+    /*
+      commentList.innerHTML = "";
+      commentsData.forEach((comment) => {
+        const commentItem = document.createElement("li");
+        commentItem.textContent=comment.body;
+       // console.log(commentsItem)
+       commentItem.innerHTML = `
+        <p>ID: ${comment.id}</p>
+        <p>Body: ${comment.body}</p>
+        <p>Benutzername: ${comment.user.username}</p> 
+        `
+        //commentItem.textContent = comment.text;
+        commentList.appendChild(commentItem);
+      });*/
 
-      commentItem.appendChild(commentId);
-      commentItem.appendChild(commentBody);
-      commentItem.appendChild(commentUsername);
+    // Laden der Kommentare
+    const commentsResponse = await fetch(`https://dummyjson.com/comments?postId=${postId}`);
+    const commentsData = await commentsResponse.json();
 
-      commentList.appendChild(commentItem);
-    });*/
+    const commentList = document.getElementById("commentList");
     commentList.innerHTML = "";
+
     commentsData.forEach((comment) => {
       const commentItem = document.createElement("li");
-      commentItem.textContent=comment.body;
-     // console.log(commentsItem)
-     /* commentItem.innerHTML = `
-      <p>ID: ${comment.id}</p>
-      <p>Body: ${comment.body}</p>
-      <p>Benutzername: ${comment.user.username}</p> 
-      `*/
-      //commentItem.textContent = comment.text;
+      commentItem.classList.add("comment-item");
+      commentItem.innerHTML = `
+        <p>${comment.name}</p>
+        <p>${comment.body}</p>
+      `;
       commentList.appendChild(commentItem);
     });
 
-   // createBackButton(); // Button erstellen und anzeigen
   } catch (error) {
     showDetailError("Fehler beim Abrufen der Detaildaten.", error);
   }
+}
+
+function navigateToUser(userId) {
+  location.hash = `/user/${userId}`;
+}
+// Funktion für die User-Seite
+
+async function userPage(matches) {
+  switchVisibleSection("userPage");
+
+  const userTitle = document.getElementById("userTitle");
+  const userContainer = document.getElementById("userContainer");
+
+  const userId = matches[1];
+
+  try {
+    const userResponse = await fetch('https://dummyjson.com/users/${userID}');
+    const userData = await userRespones.json();
+
+
+    /*const userContainer = document.getElementById("userPage");
+    userContainer.innerHTML = `
+    <p>User-ID: ${userData.id}</p>
+    <p>Username: ${userData.username}<p>
+    <p>Geburtstag: ${userData.birthDate}<p>
+  `;
+
+    const userContainer = document.getElementById("userCommentsContainer");
+    userContainer.innerHTML = "";*/
+
+    userTitle.textContent = `Hier der Autor des Posts (${userData.username}):`;
+    userContainer.innerHTML = `
+      <p>User-ID: ${userData.id}</p>
+      <p>Username: ${userData.username}</p>
+      <p>Geburtstag: ${userData.birthDate}</p>
+      <img src="${userData.image}" alt="Profilbild" />
+    `;
+  } catch (error) {
+    showUserError("Fehler beim Abrufen der Benutzerdaten.", error);
+  }
+}
+
+
+
 }
 
 
@@ -195,10 +242,11 @@ function showError(message, error) {
     errorContainer.style.display = "none";
   }
 }
-function showDetailError(message, error){
+
+function showDetailError(message, error) {
   const detailErrorContainer = document.getElementById("detailErrorContainer");
   const detailErrorText = document.createElement("p");
-  errorText.textContent=message;
+  errorText.textContent = message;
 
   detailErrorContainer.appendChild(detailErrorText);
 
