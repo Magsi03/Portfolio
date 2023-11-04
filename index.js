@@ -12,7 +12,7 @@ window.addEventListener("load", () => {
   
   const router = new Router([{
       url: "^/$",
-      show: searchPage,
+      show: () => searchPage(""),
     },
     {
       url: "^/detail/(.*)$",
@@ -24,22 +24,19 @@ window.addEventListener("load", () => {
  
 });
  
- 
 //Funktion um zur Detailseite navigieren zu können
 function navigateToDetail(id) {
   location.hash = `/detail/${id}`;
 }
  
- 
 //Funktion für die Suchseite (Startseite)
-async function searchPage() {
+async function searchPage(searchTerm) {
   console.log("Suchseite aufgerufen");
   switchVisibleSection("searchPage");
  
   const searchResultsContainer = document.getElementById("searchResults");
   const errorContainer = document.getElementById("errorContainer");
- 
-    const searchTerm = searchForm.search.value;
+
  
     try {
  
@@ -50,7 +47,7 @@ async function searchPage() {
  
       if (data?.posts?.length > 0) {
  
-        const searchResultsContainer = document.getElementById("searchResults");
+        //const searchResultsContainer = document.getElementById("searchResults");
         errorContainer.innerHTML = ""; // Leeren Sie den Fehlercontainer
         errorContainer.style.display = "none"; // Verstecken Sie den Fehlercontainer
  
@@ -79,7 +76,6 @@ async function searchPage() {
           searchResultsContainer.appendChild(resultItem);
         });
  
-        switchVisibleSection("searchPage"); // Zeigen Sie die Suchergebnisse an
       } else {
         showError("Keine Ergebnisse gefunden.");
       }
