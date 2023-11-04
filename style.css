@@ -189,3 +189,45 @@ footer {
 #detailPage{
   padding-bottom: 78px;
 }
+
+
+
+/* Mobile Navigation */
+@media screen and (max-width: 600px) {
+  .mobile-nav {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 10px;
+    z-index: 9999;
+  }
+
+  .mobile-nav .menu-icon {
+    display: block;
+    cursor: pointer;
+    font-size: 24px;
+  }
+
+  .mobile-nav .menu-items {
+    display: none;
+    padding: 10px;
+  }
+
+  .mobile-nav .menu-items a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .mobile-nav .menu-items a:hover {
+    background-color: #f5f5f5;
+  }
+
+  .mobile-nav .menu-items.show {
+    display: block;
+  }
+}

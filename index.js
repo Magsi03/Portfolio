@@ -130,32 +130,15 @@ async function detailPage(matches) {
     const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
     const postData = await postResponse.json();
 
-    // const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
-    //const commentsData = await commentsResponse.json();
-    // console.log(commentsData);
     detailTitle.textContent = postData.title;
     detailContent.innerHTML = `
-      <p>${postData.body}</p>
+    <p>Post ${postData.id}:</p> 
+    <p>${postData.body}</p>
       <p>Tags: ${postData.tags.join(", ")}</p>
       <p>Nutzer-ID: ${postData.userId}</p>
       <button onclick="navigateToUser('${postData.userId}')">Zum Autor</button>
       <p>Reaktionen: ${postData.reactions}</p>
     `;
-
-    /*
-      commentList.innerHTML = "";
-      commentsData.forEach((comment) => {
-        const commentItem = document.createElement("li");
-        commentItem.textContent=comment.body;
-       // console.log(commentsItem)
-       commentItem.innerHTML = `
-        <p>ID: ${comment.id}</p>
-        <p>Body: ${comment.body}</p>
-        <p>Benutzername: ${comment.user.username}</p> 
-        `
-        //commentItem.textContent = comment.text;
-        commentList.appendChild(commentItem);
-      });*/
 
 
     // Laden der Kommentare
@@ -182,6 +165,9 @@ async function detailPage(matches) {
         commentList.appendChild(commentItem);
       });
     } else {
+      const commentList = document.getElementById("commentList");
+      commentList.innerHTML = "";
+
       const noCommentsMessage = document.createElement("p");
       noCommentsMessage.textContent = "Dieser Post hat keine Kommentare.";
       commentList.appendChild(noCommentsMessage);
@@ -195,6 +181,8 @@ async function detailPage(matches) {
 function navigateToUser(userId) {
   location.hash = `/user/${userId}`;
 }
+
+
 // Funktion für die User-Seite
 
 async function userPage(matches) {
