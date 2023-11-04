@@ -19,6 +19,7 @@ window.addEventListener("load", () => {
   ]);
 
   router.start();
+  searchPage();
 });
 
 
@@ -115,9 +116,6 @@ function resultsPage() {
     resultContainer.appendChild(resultItem);
   });
 
-  /* const resultPage = document.getElementById("resultPage");
-   resultPage.classList.remove("hidden");*/
-
 }
 async function detailPage(matches) {
   switchVisibleSection("detailPage");
@@ -159,22 +157,35 @@ async function detailPage(matches) {
         commentList.appendChild(commentItem);
       });*/
 
+
     // Laden der Kommentare
-    const commentsResponse = await fetch(`https://dummyjson.com/comments?postId=${postId}`);
+    const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
     const commentsData = await commentsResponse.json();
+    const comments = commentsData.comments;
 
-    const commentList = document.getElementById("commentList");
-    commentList.innerHTML = "";
+    console.log(commentsData);
+    console.log(comments);
 
-    commentsData.forEach((comment) => {
-      const commentItem = document.createElement("li");
-      commentItem.classList.add("comment-item");
-      commentItem.innerHTML = `
-        <p>${comment.name}</p>
-        <p>${comment.body}</p>
+    if (comments.length > 0) {
+
+      const commentList = document.getElementById("commentList");
+      commentList.innerHTML = "";
+
+      comments.forEach((comment) => {
+        const commentItem = document.createElement("li");
+        commentItem.classList.add("comment-item");
+        commentItem.innerHTML = `
+      <p>Kommentar ${comment.id}:</p>
+      <p> ${comment.body}</p>
+      <p>von: ${comment.user.username}</p>
       `;
-      commentList.appendChild(commentItem);
-    });
+        commentList.appendChild(commentItem);
+      });
+    } else {
+      const noCommentsMessage = document.createElement("p");
+      noCommentsMessage.textContent = "Dieser Post hat keine Kommentare.";
+      commentList.appendChild(noCommentsMessage);
+    }
 
   } catch (error) {
     showDetailError("Fehler beim Abrufen der Detaildaten.", error);
@@ -223,9 +234,6 @@ async function userPage(matches) {
 
 
 
-}
-
-
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
   const errorContainer = document.getElementById("errorContainer");
@@ -254,5 +262,19 @@ function showDetailError(message, error) {
     errorContainer.style.display = "block";
   } else {
     errorContainer.style.display = "none";
+  }
+}
+
+function showUserError(message, error) {
+  const duserErrorContainer = document.getElementById("userErrorContainer");
+  const userErrorText = document.createElement("p");
+  errorText.textContent = message;
+
+  userErrorContainer.appendChild(detailErrorText);
+
+  if (message) {
+    userContainer.style.display = "block";
+  } else {
+    userContainer.style.display = "none";
   }
 }

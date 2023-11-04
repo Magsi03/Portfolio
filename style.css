@@ -99,7 +99,8 @@ footer {
   }
 }
 
-#errorContainer {
+/*Fehlermeldungs-Container*/
+#errorContainer , #detailErrorContainer, #userErrorContainer{
   display: none;
   color: red;
   font-weight: bold;
