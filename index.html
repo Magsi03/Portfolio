@@ -27,10 +27,11 @@
                 <input type="text" name="search" placeholder="Suchbegriff eingeben">
                 <input type="submit" value="Suchen">
             </form>
+            <div id="errorContainer"></div>
             <div id="searchResults"></div>
             <p>Hier könnt ihr nach Posts und den Kommentaren dazu suchen :&rpar;</p>
             <p id="untererText">Viel Spaß dabei &hearts;</p>
-            <div id="errorContainer"></div>
+            
         </section>
 
         <section id="detailPage" class="hidden">
@@ -38,15 +39,7 @@
             <h2 id="detailTitle"></h2>
             <div id="detailContent"></div>
             <h3>Kommentare:</h3>
-            <div id="userErrorContainer"></div>
             <ul id="commentList"></ul>
-        </section>
-
-        <section id="userPage" class="hidden">
-            <a href="#/" class="button">Zurück zur Suche</a>
-            <a href="#/detail/(.*)$" class="button">Zurück zum Post</a>
-            <h2 id="userTitle"></h2>
-            <div id="userContainer"></div>
         </section>
 
     </main>

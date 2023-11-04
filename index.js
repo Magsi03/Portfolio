@@ -8,10 +8,6 @@ window.addEventListener("load", () => {
       url: "^/detail/(.*)$",
       show: detailPage,
     },
-    {
-      url: "^/user/(.*)$",
-      show: userPage,
-    }
   ]);
 
   router.start();
@@ -40,16 +36,14 @@ function navigateToDetail(id) {
   location.hash = `/detail/${id}`;
 }
 
-// Funktion zum Zurücknavigieren zur Suchseite
-function navigateToSearch() {
-  location.hash = "/"; 
-}
 
 //Funktion für die Suchseite (Startseite)
 function searchPage() {
   switchVisibleSection("searchPage");
 
   const searchForm = document.getElementById("searchForm");
+  const searchResultsContainer = document.getElementById("searchResults");
+  const errorContainer = document.getElementById("errorContainer");
 
   searchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -57,14 +51,19 @@ function searchPage() {
     const searchTerm = searchForm.search.value;
 
     try {
+
+      searchResultsContainer.innerHTML = ""; //vorherige Suchergebnisse entfernen
+
       const response = await fetch(`https://dummyjson.com/posts/search?q=${searchTerm}`);
       const data = await response.json();
 
       if (data?.posts?.length > 0) {
-        const searchResultsContainer = document.getElementById("searchResults");
-        searchResultsContainer.innerHTML = ""; // Leeren Sie den Container, um vorherige Ergebnisse zu entfernen
 
-        // Schleife über die Suchergebnisse und fügen Sie sie dem Container hinzu
+        const searchResultsContainer = document.getElementById("searchResults");
+        errorContainer.innerHTML = ""; // Leeren Sie den Fehlercontainer
+        errorContainer.style.display = "none"; // Verstecken Sie den Fehlercontainer
+
+        // Schleife über die Suchergebnisse um sie zum Container hinzuzufügen
         data.posts.forEach((post) => {
           const resultItem = document.createElement("div");
           resultItem.classList.add("result-item");
@@ -116,8 +115,8 @@ async function detailPage(matches) {
     <p>${postData.body}</p>
       <p>Tags: ${postData.tags.join(", ")}</p>
       <p>Nutzer-ID: ${postData.userId}</p>
-      <button onclick="navigateToUser('${postData.userId}')">Zum Autor</button>
       <p>Reaktionen: ${postData.reactions}</p>
+      <p></p>
     `;
 
 
@@ -158,38 +157,6 @@ async function detailPage(matches) {
   }
 }
 
-function navigateToUser(userId) {
-  location.hash = `/user/${userId}`;
-}
-
-
-// Funktion für die User-Seite
-
-async function userPage(matches) {
-  switchVisibleSection("userPage");
-
-  const userTitle = document.getElementById("userTitle");
-  const userContainer = document.getElementById("userContainer");
-
-  const userId = matches[1];
-
-  try {
-    const userResponse = await fetch('https://dummyjson.com/users/${userId}');
-    const userData = await userRespones.json();
-
-    userTitle.textContent = `Hier der Autor des Posts (${userData.username}):`;
-    userContainer.innerHTML = `
-      <p>User-ID: ${userData.id}</p>
-      <p>Username: ${userData.username}</p>
-      <p>Geburtstag: ${userData.birthDate}</p>
-      <img src="${userData.image}" alt="Profilbild" />
-    `;
-  } catch (error) {
-    showUserError("Fehler beim Abrufen der Benutzerdaten.", error);
-  }
-}
-
-
 
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
@@ -208,17 +175,3 @@ function showError(message, error) {
   }
 }
 
-
-function showUserError(message, error) {
-  const duserErrorContainer = document.getElementById("userErrorContainer");
-  const userErrorText = document.createElement("p");
-  errorText.textContent = message;
-
-  userErrorContainer.appendChild(detailErrorText);
-
-  if (message) {
-    userContainer.style.display = "block";
-  } else {
-    userContainer.style.display = "none";
-  }
-}

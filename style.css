@@ -27,9 +27,11 @@ h1 {
   margin-bottom: 40px;
 }
 
-h2{
+h2, h3{
   margin: 20px;
 }
+
+
 
 form {
   margin-bottom: 20px;
@@ -71,10 +73,6 @@ footer {
   margin-top: 10px;
 }
 
-.result-container {
-  padding: 20px;
-}
-
 .result-item {
   border-bottom: 1px solid #cccccc;
   padding: 3px 0;
@@ -105,7 +103,7 @@ footer {
 }
 
 /*Fehlermeldungs-Container*/
-#errorContainer , #detailErrorContainer, #userErrorContainer{
+#errorContainer {
   display: none;
   color: red;
   font-weight: bold;
@@ -136,11 +134,6 @@ footer {
   margin-bottom: 10px;
 }
 
-.comment-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
 
 .comment-item {
   margin-bottom: 10px;
@@ -185,10 +178,6 @@ footer {
   padding: 10px;
   background-color: #f5f5f5;
   border-radius: 5px;
-}
-
-#resultPage{
-  padding-bottom: 78px;
 }
 
 #detailPage{
@@ -236,6 +225,8 @@ footer {
     display: block;
   }
 }
+
+
 #untererText{
-  padding-bottom:100px;
+  padding-bottom:150px;
 }
