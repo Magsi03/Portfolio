@@ -5,10 +5,6 @@ window.addEventListener("load", () => {
       show: searchPage,
     },
     {
-      url: "^/results$",
-      show: resultsPage,
-    },
-    {
       url: "^/detail/(.*)$",
       show: detailPage,
     },
@@ -38,9 +34,19 @@ function switchVisibleSection(idVisible) {
   if (sectionElement) sectionElement.classList.remove("hidden");
 }
 
+
+//Funktion um zur Detailseite navigieren zu können
+function navigateToDetail(id) {
+  location.hash = `/detail/${id}`;
+}
+
+// Funktion zum Zurücknavigieren zur Suchseite
+function navigateToSearch() {
+  location.hash = "/"; 
+}
+
 //Funktion für die Suchseite (Startseite)
 function searchPage() {
-
   switchVisibleSection("searchPage");
 
   const searchForm = document.getElementById("searchForm");
@@ -55,8 +61,34 @@ function searchPage() {
       const data = await response.json();
 
       if (data?.posts?.length > 0) {
-        results = data.posts;
-        location.hash = "/results";
+        const searchResultsContainer = document.getElementById("searchResults");
+        searchResultsContainer.innerHTML = ""; // Leeren Sie den Container, um vorherige Ergebnisse zu entfernen
+
+        // Schleife über die Suchergebnisse und fügen Sie sie dem Container hinzu
+        data.posts.forEach((post) => {
+          const resultItem = document.createElement("div");
+          resultItem.classList.add("result-item");
+
+          const title = document.createElement("h3");
+          title.classList.add("result-title");
+          title.textContent = post.title;
+
+          const description = document.createElement("p");
+          description.classList.add("result-description");
+          description.textContent = post.description;
+
+          resultItem.appendChild(title);
+          resultItem.appendChild(description);
+
+          // Klick-Event für den Detail-Link hinzufügen
+          resultItem.addEventListener("click", () => {
+            navigateToDetail(post.id);
+          });
+
+          searchResultsContainer.appendChild(resultItem);
+        });
+
+        switchVisibleSection("searchPage"); // Zeigen Sie die Suchergebnisse an
       } else {
         showError("Keine Ergebnisse gefunden.");
       }
@@ -64,65 +96,13 @@ function searchPage() {
       showError("Fehler beim Abrufen der Suchergebnisse.", error);
     }
   });
-
 }
 
-//Funktion um zur Detailseite navigieren zu können
-function navigateToDetail(id) {
-  location.hash = `/detail/${id}`;
-}
-
-// Funktion zum Zurücknavigieren zur Suchseite
-function navigateToSearch() {
-  location.hash = "/"; // oder die entsprechende Route für die Suchseite
-}
-
-// Event-Listener für den Zurück-Button
-const backButton = document.getElementById("backButton");
-if (backButton) {
-  backButton.addEventListener("click", navigateToSearch);
-}
-
-//Funktion für die Ergebnisseite
-function resultsPage() {
-  switchVisibleSection("resultPage");
-
-  const resultsTitle = document.getElementById("resultsTitle");
-  const resultContainer = document.getElementById("resultContainer");
-
-  resultsTitle.textContent = "Hier die passenden Ergebnisse (weitere Infos durch Auswählen eines Posts):";
-  resultContainer.innerHTML = "";
-
-  results.forEach((result) => {
-    const resultItem = document.createElement("div");
-    resultItem.classList.add("result-item");
-
-    const title = document.createElement("h3");
-    title.classList.add("result-title");
-    title.textContent = result.title;
-
-    const description = document.createElement("p");
-    description.classList.add("result-description");
-    description.textContent = result.description;
-
-    resultItem.appendChild(title);
-    resultItem.appendChild(description);
-
-    // Klick-Event für den Detail-Link hinzufügen
-    resultItem.addEventListener("click", () => {
-      navigateToDetail(result.id);
-    });
-
-    resultContainer.appendChild(resultItem);
-  });
-
-}
 async function detailPage(matches) {
   switchVisibleSection("detailPage");
 
   const detailTitle = document.getElementById("detailTitle");
   const detailContent = document.getElementById("detailContent");
-  //const commentList = document.getElementById("commentList");
 
   const postId = matches[1];
 
@@ -194,7 +174,7 @@ async function userPage(matches) {
   const userId = matches[1];
 
   try {
-    const userResponse = await fetch('https://dummyjson.com/users/${userID}');
+    const userResponse = await fetch('https://dummyjson.com/users/${userId}');
     const userData = await userRespones.json();
 
 

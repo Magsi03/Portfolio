@@ -23,7 +23,12 @@ body {
 
 h1 {
   font-size: 36px;
+  margin: 20px;
   margin-bottom: 40px;
+}
+
+h2{
+  margin: 20px;
 }
 
 form {
@@ -49,7 +54,7 @@ input[type="submit"] {
 
 p {
   padding-top: 15px;
-  margin-bottom: 10px;
+  margin: 20px;
 }
 
 footer {
@@ -230,4 +235,7 @@ footer {
   .mobile-nav .menu-items.show {
     display: block;
   }
+}
+#untererText{
+  padding-bottom:100px;
 }
