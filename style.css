@@ -31,7 +31,11 @@ h2, h3{
   margin: 20px;
 }
 
-
+@media screen and (max-width: 600px) {
+  .result-title {
+    text-decoration: underline;
+  }
+}
 
 form {
   margin-bottom: 20px;
@@ -156,6 +160,7 @@ footer {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-decoration: underline;
 }
 
 .button:hover {
@@ -181,9 +186,8 @@ footer {
 }
 
 #detailPage{
-  padding-bottom: 78px;
+  padding-bottom: 150px;
 }
-
 
 
 /* Mobile Navigation */

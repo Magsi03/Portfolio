@@ -11,24 +11,14 @@ window.addEventListener("load", () => {
   ]);
 
   router.start();
+
+
+
+  const searchForm = document.getElementById("searchForm");
+  searchForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
   searchPage();
 });
-
-
-
-//globale Variable um die Suchergebnisse abzuspeichern
-results = [];
-
-/**
- * Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
- * @param {string} idVisible ID der anzuzeigenden <section> 
- */
-function switchVisibleSection(idVisible) {
-  document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
-
-  let sectionElement = document.getElementById(idVisible);
-  if (sectionElement) sectionElement.classList.remove("hidden");
-}
 
 
 //Funktion um zur Detailseite navigieren zu können
@@ -38,15 +28,11 @@ function navigateToDetail(id) {
 
 
 //Funktion für die Suchseite (Startseite)
-function searchPage() {
+async function searchPage() {
   switchVisibleSection("searchPage");
 
-  const searchForm = document.getElementById("searchForm");
   const searchResultsContainer = document.getElementById("searchResults");
   const errorContainer = document.getElementById("errorContainer");
-
-  searchForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
 
     const searchTerm = searchForm.search.value;
 
@@ -94,8 +80,8 @@ function searchPage() {
     } catch (error) {
       showError("Fehler beim Abrufen der Suchergebnisse.", error);
     }
+  }
   });
-}
 
 async function detailPage(matches) {
   switchVisibleSection("detailPage");

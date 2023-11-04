@@ -2,23 +2,7 @@
   "use strict";
 
 class Router {
-    /**
-     * Konstruktor. Im Parameter routes muss eine Liste mit den vorhandenen
-     * URL-Routen der App übergeben werden. Die Liste muss folgendes Format
-     * haben:
-     *      [
-     *          {
-     *              url: "^/$"              // Regulärer Ausdruck zur URL
-     *              show: matches => {...}  // Funktion zur Anzeige des Inhalts
-     *          }, {
-     *              url: "^/Details/(.*)$"  // Regulärer Ausdruck zur URL
-     *              show: matches => {...}  // Funktion zur Anzeige des Inhalts
-     *          },
-     *          ...
-     *      ]
-     *
-     * @param {List} routes Definition der in der App verfügbaren Seiten
-     */
+
     constructor(routes) {
         this._routes = routes;
         this._started = false;
@@ -61,4 +45,13 @@ class Router {
         route.show(matches);
     }
 }
+ 
+// Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
+// @param {string} idVisible ID der anzuzeigenden <section> 
+ 
+function switchVisibleSection(idVisible) {
+  document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
 
+  let sectionElement = document.getElementById(idVisible);
+  if (sectionElement) sectionElement.classList.remove("hidden");
+}
