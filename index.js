@@ -177,17 +177,6 @@ async function userPage(matches) {
     const userResponse = await fetch('https://dummyjson.com/users/${userId}');
     const userData = await userRespones.json();
 
-
-    /*const userContainer = document.getElementById("userPage");
-    userContainer.innerHTML = `
-    <p>User-ID: ${userData.id}</p>
-    <p>Username: ${userData.username}<p>
-    <p>Geburtstag: ${userData.birthDate}<p>
-  `;
-
-    const userContainer = document.getElementById("userCommentsContainer");
-    userContainer.innerHTML = "";*/
-
     userTitle.textContent = `Hier der Autor des Posts (${userData.username}):`;
     userContainer.innerHTML = `
       <p>User-ID: ${userData.id}</p>
@@ -219,19 +208,6 @@ function showError(message, error) {
   }
 }
 
-function showDetailError(message, error) {
-  const detailErrorContainer = document.getElementById("detailErrorContainer");
-  const detailErrorText = document.createElement("p");
-  errorText.textContent = message;
-
-  detailErrorContainer.appendChild(detailErrorText);
-
-  if (message) {
-    errorContainer.style.display = "block";
-  } else {
-    errorContainer.style.display = "none";
-  }
-}
 
 function showUserError(message, error) {
   const duserErrorContainer = document.getElementById("userErrorContainer");
