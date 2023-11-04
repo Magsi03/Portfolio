@@ -1,5 +1,15 @@
 //Router konfigurieren und starten
 window.addEventListener("load", () => {
+  const searchForm = document.getElementById("searchForm");
+  searchForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const searchTerm = searchForm.search.value.trim();
+    if (searchTerm !== "") {
+      console.log("Suchbegriff:", searchTerm);
+      searchPage();
+    }
+  });
+  
   const router = new Router([{
       url: "^/$",
       show: searchPage,
@@ -12,12 +22,6 @@ window.addEventListener("load", () => {
  
   router.start();
  
- 
- 
-  const searchForm = document.getElementById("searchForm");
-  searchForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-  searchPage();
 });
  
  
@@ -29,6 +33,7 @@ function navigateToDetail(id) {
  
 //Funktion für die Suchseite (Startseite)
 async function searchPage() {
+  console.log("Suchseite aufgerufen");
   switchVisibleSection("searchPage");
  
   const searchResultsContainer = document.getElementById("searchResults");
@@ -67,6 +72,7 @@ async function searchPage() {
  
           // Klick-Event für den Detail-Link hinzufügen
           resultItem.addEventListener("click", () => {
+            console.log("Detail-Link geklickt");
             navigateToDetail(post.id);
           });
  
@@ -81,9 +87,9 @@ async function searchPage() {
       showError("Fehler beim Abrufen der Suchergebnisse.", error);
     }
   }
-  });
  
 async function detailPage(matches) {
+  console.log("detailPage aufgerufen");
   switchVisibleSection("detailPage");
  
   const detailTitle = document.getElementById("detailTitle");
@@ -139,13 +145,14 @@ async function detailPage(matches) {
     }
  
   } catch (error) {
-    showDetailError("Fehler beim Abrufen der Detaildaten.", error);
+    showError("Fehler beim Abrufen der Detaildaten.", error);
   }
 }
  
  
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
+  console.error("Fehler:", message, error);
   const errorContainer = document.getElementById("errorContainer");
   const errorText = document.createElement("p");
   errorText.textContent = message;
