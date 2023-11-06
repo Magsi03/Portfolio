@@ -7,7 +7,7 @@ body {
   height: 100%;
   box-sizing: border-box;
 }
- 
+
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -17,39 +17,39 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
- 
+
 .hidden {
   display: none;
 }
- 
+
 h1 {
   font-size: 36px;
   margin: 20px;
   margin-bottom: 40px;
 }
- 
+
 h2,
 h3 {
   margin: 20px;
 }
- 
+
 p {
   padding-top: 15px;
   margin: 20px;
 }
- 
+
 /* Formular */
 form {
   margin-bottom: 20px;
 }
- 
+
 input[type="text"] {
   padding: 10px;
   width: 300px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
- 
+
 input[type="submit"] {
   padding: 10px 20px;
   background-color: #337ab7;
@@ -59,7 +59,7 @@ input[type="submit"] {
   cursor: pointer;
   margin-top: 20px;
 }
- 
+
 /* Suchergebnisse */
 .result-item {
   border-bottom: 1px solid #cccccc;
@@ -77,18 +77,18 @@ input[type="submit"] {
 .result-item:hover {
   background-color: #f5f5f5;
 }
- 
+
 .result-title {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
 }
- 
+
 .result-description {
   font-size: 14px;
   color: #555555;
 }
- 
+
 /* Fehlermeldungs-Container */
 #errorContainer {
   display: none;
@@ -103,30 +103,30 @@ input[type="submit"] {
   margin-left: auto;
   margin-right: auto;
 }
- 
+
 /* Detailseite-Stile */
 .detail-container {
   padding: 20px;
 }
- 
+
 .post-title {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
 }
- 
+
 .post-content {
   font-size: 16px;
   margin-bottom: 10px;
 }
- 
+
 .comment-item {
   margin-bottom: 10px;
   padding: 10px;
   background-color: #f5f5f5;
   border-radius: 5px;
 }
- 
+
 @media screen and (min-width: 1024px) {
   .comment-item {
     max-width: 600px;
@@ -134,12 +134,12 @@ input[type="submit"] {
     margin-right: auto;
   }
 }
- 
+
 .comment-text {
   font-size: 14px;
   color: #555555;
 }
- 
+
 .button {
   display: inline-block;
   padding: 10px 20px;
@@ -151,33 +151,33 @@ input[type="submit"] {
   transition: background-color 0.3s;
   text-decoration: underline;
 }
- 
+
 .button:hover {
   color: white;
   background-color: #337ab7;
 }
- 
+
 .button:focus {
   outline: none;
 }
- 
+
 #commentList {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
- 
+
 #commentList li {
   margin-bottom: 10px;
   padding: 10px;
   background-color: #f5f5f5;
   border-radius: 5px;
 }
- 
+
 #detailPage {
   padding-bottom: 150px;
 }
- 
+
 /* Mobile Navigation */
 @media screen and (max-width: 600px) {
   .mobile-nav {
@@ -190,43 +190,43 @@ input[type="submit"] {
     padding: 10px;
     z-index: 9999;
   }
- 
+
   .mobile-nav .menu-icon {
     display: block;
     cursor: pointer;
     font-size: 24px;
   }
- 
+
   .mobile-nav .menu-items {
     display: none;
     padding: 10px;
   }
- 
+
   .mobile-nav .menu-items a {
     display: block;
     padding: 10px;
     text-decoration: none;
     color: #333;
   }
- 
+
   .mobile-nav .menu-items a:hover {
     background-color: #f5f5f5;
   }
- 
+
   .mobile-nav .menu-items.show {
     display: block;
   }
- 
+
   /* Suchergebnisse Responsive-Stile */
   .result-container {
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   }
- 
+
   .result-title {
     text-decoration: underline;
   }
 }
- 
+
 /* Footer */
 footer {
   position: fixed;
@@ -241,8 +241,8 @@ footer {
   line-height: 0.1;
   margin-top: 10px;
 }
- 
- 
+
+
 /* Unterer Text */
 #untererText {
   padding-bottom: 150px;
