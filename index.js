@@ -6,7 +6,7 @@ window.addEventListener("load", () => {
     const searchTerm = searchForm.search.value.trim();
     if (searchTerm !== "") {
       console.log("Suchbegriff:", searchTerm);
-      searchPage();
+      searchPage(searchTerm);
     }
   });
   
@@ -28,12 +28,28 @@ window.addEventListener("load", () => {
 function navigateToDetail(id) {
   location.hash = `/detail/${id}`;
 }
+
+
+// Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
+// @param {string} idVisible ID der anzuzeigenden <section> 
+ 
+function switchVisibleSection(idVisible) {
+  document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
+
+  let sectionElement = document.getElementById(idVisible);
+  if (sectionElement) sectionElement.classList.remove("hidden");
+}
+
  
 //Funktion für die Suchseite (Startseite)
 async function searchPage(searchTerm) {
   console.log("Suchseite aufgerufen");
   switchVisibleSection("searchPage");
  
+  if(!searchTerm){
+    return;
+  }
+
   const searchResultsContainer = document.getElementById("searchResults");
   const errorContainer = document.getElementById("errorContainer");
 

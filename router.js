@@ -46,12 +46,4 @@ class Router {
     }
 }
  
-// Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
-// @param {string} idVisible ID der anzuzeigenden <section> 
- 
-function switchVisibleSection(idVisible) {
-  document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
 
-  let sectionElement = document.getElementById(idVisible);
-  if (sectionElement) sectionElement.classList.remove("hidden");
-}
