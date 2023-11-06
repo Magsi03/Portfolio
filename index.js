@@ -46,9 +46,8 @@ async function searchPage(searchTerm) {
   console.log("Suchseite aufgerufen");
   switchVisibleSection("searchPage");
  
-  if(!searchTerm){
-    return;
-  }
+  
+if (!searchTerm) return;
 
   const searchResultsContainer = document.getElementById("searchResults");
   const errorContainer = document.getElementById("errorContainer");
