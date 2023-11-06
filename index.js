@@ -9,7 +9,7 @@ window.addEventListener("load", () => {
       searchPage(searchTerm);
     }
   });
-  
+
   const router = new Router([{
       url: "^/$",
       show: () => searchPage(""),
@@ -19,12 +19,13 @@ window.addEventListener("load", () => {
       show: detailPage,
     },
   ]);
- 
+
   router.start();
- 
+
 });
- 
-//Funktion um zur Detailseite navigieren zu können
+
+
+//Funktion um zur Detailseite zu navigieren
 function navigateToDetail(id) {
   location.hash = `/detail/${id}`;
 }
@@ -32,7 +33,7 @@ function navigateToDetail(id) {
 
 // Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
 // @param {string} idVisible ID der anzuzeigenden <section> 
- 
+
 function switchVisibleSection(idVisible) {
   document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
 
@@ -40,78 +41,84 @@ function switchVisibleSection(idVisible) {
   if (sectionElement) sectionElement.classList.remove("hidden");
 }
 
- 
+
 //Funktion für die Suchseite (Startseite)
 async function searchPage(searchTerm) {
+
   console.log("Suchseite aufgerufen");
   switchVisibleSection("searchPage");
- 
-  
-if (!searchTerm) return;
 
+  //prüfen ob ein Suchbegriff eingegeben wurde
+  if (!searchTerm) return;
+
+  //Suchergebnis- und Fehler-Container erstellen
   const searchResultsContainer = document.getElementById("searchResults");
   const errorContainer = document.getElementById("errorContainer");
 
- 
-    try {
- 
-      searchResultsContainer.innerHTML = ""; //vorherige Suchergebnisse entfernen
- 
-      const response = await fetch(`https://dummyjson.com/posts/search?q=${searchTerm}`);
-      const data = await response.json();
- 
-      if (data?.posts?.length > 0) {
- 
-        //const searchResultsContainer = document.getElementById("searchResults");
-        errorContainer.innerHTML = ""; // Leeren Sie den Fehlercontainer
-        errorContainer.style.display = "none"; // Verstecken Sie den Fehlercontainer
- 
-        // Schleife über die Suchergebnisse um sie zum Container hinzuzufügen
-        data.posts.forEach((post) => {
-          const resultItem = document.createElement("div");
-          resultItem.classList.add("result-item");
- 
-          const title = document.createElement("h3");
-          title.classList.add("result-title");
-          title.textContent = post.title;
- 
-          const description = document.createElement("p");
-          description.classList.add("result-description");
-          description.textContent = post.description;
- 
-          resultItem.appendChild(title);
-          resultItem.appendChild(description);
- 
-          // Klick-Event für den Detail-Link hinzufügen
-          resultItem.addEventListener("click", () => {
-            console.log("Detail-Link geklickt");
-            navigateToDetail(post.id);
-          });
- 
-          searchResultsContainer.appendChild(resultItem);
+  try {
+
+    searchResultsContainer.innerHTML = ""; //vorherige Suchergebnisse entfernen
+
+    //fetchen, in API suchen
+    const response = await fetch(`https://dummyjson.com/posts/search?q=${searchTerm}`);
+    const data = await response.json();
+
+    if (data?.posts?.length > 0) {
+
+      errorContainer.innerHTML = ""; // Fehlercontainer leeren
+      errorContainer.style.display = "none"; // Fehlercontainer ausblenden
+
+      // Schleife über die Suchergebnisse um sie zum Container hinzuzufügen
+      data.posts.forEach((post) => {
+        const resultItem = document.createElement("div");
+        resultItem.classList.add("result-item");
+
+        const title = document.createElement("h3");
+        title.classList.add("result-title");
+        title.textContent = post.title;
+
+        const description = document.createElement("p");
+        description.classList.add("result-description");
+        description.textContent = post.description;
+
+        resultItem.appendChild(title);
+        resultItem.appendChild(description);
+
+        // Klick-Event für den Detail-Link hinzufügen
+        resultItem.addEventListener("click", () => {
+          console.log("Detail-Link geklickt");
+          navigateToDetail(post.id);
         });
- 
-      } else {
-        showError("Keine Ergebnisse gefunden.");
-      }
-    } catch (error) {
-      showError("Fehler beim Abrufen der Suchergebnisse.", error);
+
+        searchResultsContainer.appendChild(resultItem);
+      });
+
+    } else {
+      showError("Keine Ergebnisse gefunden.");
     }
+  } catch (error) {
+    showError("Fehler beim Abrufen der Suchergebnisse.", error);
   }
- 
+}
+
+// funktion für die Detailseite
 async function detailPage(matches) {
+
   console.log("detailPage aufgerufen");
   switchVisibleSection("detailPage");
- 
+
   const detailTitle = document.getElementById("detailTitle");
   const detailContent = document.getElementById("detailContent");
- 
+
+  //postId aus URL entnehmen und abspeichern
   const postId = matches[1];
- 
+
   try {
+    //Post laden
     const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
     const postData = await postResponse.json();
- 
+
+    //Post anzeigen
     detailTitle.textContent = postData.title;
     detailContent.innerHTML = `
     <p>Post ${postData.id}:</p>
@@ -121,21 +128,22 @@ async function detailPage(matches) {
       <p>Reaktionen: ${postData.reactions}</p>
       <p></p>
     `;
- 
- 
+
+
     // Laden der Kommentare
     const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
     const commentsData = await commentsResponse.json();
     const comments = commentsData.comments;
- 
+
     console.log(commentsData);
     console.log(comments);
- 
+
+//wenn der Post Kommentare hat, die Kommentare anzeigen
     if (comments.length > 0) {
- 
+
       const commentList = document.getElementById("commentList");
       commentList.innerHTML = "";
- 
+
       comments.forEach((comment) => {
         const commentItem = document.createElement("li");
         commentItem.classList.add("comment-item");
@@ -146,31 +154,33 @@ async function detailPage(matches) {
       `;
         commentList.appendChild(commentItem);
       });
+      
+      // wenn der Post keine Kommentare hat: Infotext
     } else {
       const commentList = document.getElementById("commentList");
       commentList.innerHTML = "";
- 
+
       const noCommentsMessage = document.createElement("p");
       noCommentsMessage.textContent = "Dieser Post hat keine Kommentare.";
       commentList.appendChild(noCommentsMessage);
     }
- 
+
   } catch (error) {
     showError("Fehler beim Abrufen der Detaildaten.", error);
   }
 }
- 
- 
+
+
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
   console.error("Fehler:", message, error);
   const errorContainer = document.getElementById("errorContainer");
   const errorText = document.createElement("p");
   errorText.textContent = message;
- 
+
   errorContainer.innerHTML = "";
   errorContainer.appendChild(errorText);
- 
+
   // Fehlercontainer ein- oder ausblenden
   if (message) {
     errorContainer.style.display = "block";

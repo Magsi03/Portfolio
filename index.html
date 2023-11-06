@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html>
- 
+
 <head>
     <meta charset="utf-8" />
     <title>Magalis Blog</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
- 
+
     <link rel="stylesheet" href="style.css" />
- 
+
     <script src="router.js"></script>
     <script src="index.js"></script>
- 
- 
+
+
 </head>
- 
+
 <body>
     <header>
         <h1>Willkommen auf meinem Blog :&rpar;</h1>
     </header>
- 
+
     <main id="content">
- 
+
+        <!--Suchseite-->
         <section id="searchPage" class="hidden">
             <form id="searchForm">
                 <input type="text" name="search" placeholder="Suchbegriff eingeben">
@@ -31,9 +32,9 @@
             <div id="searchResults"></div>
             <p>Hier könnt ihr nach Posts und den Kommentaren dazu suchen :&rpar;</p>
             <p id="untererText">Viel Spaß dabei &hearts;</p>
-            
         </section>
- 
+
+        <!--Detailseite-->
         <section id="detailPage" class="hidden">
             <a href="#/" class="button">zurück zur Suche</a>
             <h2 id="detailTitle"></h2>
@@ -41,15 +42,15 @@
             <h3>Kommentare:</h3>
             <ul id="commentList"></ul>
         </section>
- 
+
     </main>
- 
- 
+
+    <!--Fußzeile-->
     <footer>
         <p>&copy; 2023 Magalis Blog - Alle Rechte vorbehalten</p>
         <p>Kontakt: magali.behler@web.de</p>
     </footer>
- 
+
 </body>
- 
+
 </html>
