@@ -129,7 +129,6 @@ async function detailPage(matches) {
       <p></p>
     `;
 
-
     // Laden der Kommentare
     const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
     const commentsData = await commentsResponse.json();
@@ -138,7 +137,7 @@ async function detailPage(matches) {
     console.log(commentsData);
     console.log(comments);
 
-//wenn der Post Kommentare hat, die Kommentare anzeigen
+    //wenn der Post Kommentare hat, die Kommentare anzeigen
     if (comments.length > 0) {
 
       const commentList = document.getElementById("commentList");
@@ -154,7 +153,7 @@ async function detailPage(matches) {
       `;
         commentList.appendChild(commentItem);
       });
-      
+    
       // wenn der Post keine Kommentare hat: Infotext
     } else {
       const commentList = document.getElementById("commentList");
@@ -166,7 +165,7 @@ async function detailPage(matches) {
     }
 
   } catch (error) {
-    showError("Fehler beim Abrufen der Detaildaten.", error);
+    showDetailError("Fehler beim Abrufen der Detaildaten.", error);
   }
 }
 
@@ -186,5 +185,23 @@ function showError(message, error) {
     errorContainer.style.display = "block";
   } else {
     errorContainer.style.display = "none";
+  }
+}
+
+
+//Funktion zum Anzeigen des Detailfehler-Containers
+function showDetailError(message, error){
+const detailErrorContainer = document.getElementById("detailErrorContainer");
+  const errorText = document.createElement("p");
+  errorText.textContent = message;
+
+  detailErrorContainer.innerHTML = "";
+  detailErrorContainer.appendChild(errorText);
+
+  // Fehlercontainer ein- oder ausblenden
+  if (message) {
+    detailErrorContainer.style.display = "block";
+  } else {
+    detailErrorContainer.style.display = "none";
   }
 }
