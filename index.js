@@ -1,12 +1,18 @@
 //Router konfigurieren und starten
 window.addEventListener("load", () => {
   const searchForm = document.getElementById("searchForm");
+  const hintTextContainer = document.getElementById("hintTextContainer");
+  const hinweisText = document.getElementById("Hinweistext");
+  const untererText = document.getElementById("untererText");
+
   searchForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const searchTerm = searchForm.search.value.trim();
     if (searchTerm !== "") {
       console.log("Suchbegriff:", searchTerm);
       searchPage(searchTerm);
+      hintTextContainer.style.display = "none";
+      untererText.style.display = "none";
     }
   });
 
@@ -21,6 +27,11 @@ window.addEventListener("load", () => {
   ]);
 
   router.start();
+
+  // Initial anzeigen
+  hintTextContainer.style.display = "block";
+hinweisText.style.display="block";
+  untererText.style.display = "block";
 
 });
 
@@ -94,10 +105,10 @@ async function searchPage(searchTerm) {
       });
 
     } else {
-      showError("Keine Ergebnisse gefunden.");
+      showError("Keine Ergebnisse gefunden  😕");
     }
   } catch (error) {
-    showError("Fehler beim Abrufen der Suchergebnisse.", error);
+    showError("❗️ Fehler beim Abrufen der Suchergebnisse ❗️", error);
   }
 }
 
@@ -119,9 +130,8 @@ async function detailPage(matches) {
     const postData = await postResponse.json();
 
     //Post anzeigen
-    detailTitle.textContent = postData.title;
+    detailTitle.textContent = "Post "+ postData.id +": " + postData.title;
     detailContent.innerHTML = `
-    <p>Post ${postData.id}:</p>
     <p>${postData.body}</p>
       <p>Tags: ${postData.tags.join(", ")}</p>
       <p>Nutzer-ID: ${postData.userId}</p>
@@ -160,12 +170,12 @@ async function detailPage(matches) {
       commentList.innerHTML = "";
 
       const noCommentsMessage = document.createElement("p");
-      noCommentsMessage.textContent = "Dieser Post hat keine Kommentare.";
+      noCommentsMessage.textContent = "Dieser Post hat keine Kommentare 😕";
       commentList.appendChild(noCommentsMessage);
     }
 
   } catch (error) {
-    showDetailError("Fehler beim Abrufen der Detaildaten.", error);
+    showDetailError("❗️ Fehler beim Abrufen der Detaildaten ❗️", error);
   }
 }
 
