@@ -176,7 +176,7 @@ async function detailPage(matches) {
         const userImage = document.createElement("img");
         userImage.src = userData.users[0].image;
         userImage.alt = "Benutzerbild";
-        userImage.classList.add("img-small");
+        userImage.classList.add("userImg");
         commentItem.appendChild(userImage);
       } else {
         // Wenn kein Benutzerbild gefunden wurde, eine Meldung anzeigen

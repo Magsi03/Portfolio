@@ -164,7 +164,7 @@ input[type="submit"] {
   border-radius: 5px;
 }
 
-.img-small {
+.userImg {
   width: 100px;
   height: 100px;
 }
@@ -277,6 +277,11 @@ footer {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .userImg {
+    width: 150px;
+    height: 150px;
   }
 
   #detailPage {
