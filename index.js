@@ -88,12 +88,7 @@ async function searchPage(searchTerm) {
         title.classList.add("result-title");
         title.textContent = post.title;
 
-        const description = document.createElement("p");
-        description.classList.add("result-description");
-        description.textContent = post.description;
-
         resultItem.appendChild(title);
-        resultItem.appendChild(description);
 
         // Klick-Event für den Detail-Link hinzufügen
         resultItem.addEventListener("click", () => {
@@ -118,8 +113,8 @@ async function detailPage(matches) {
   console.log("detailPage aufgerufen");
   switchVisibleSection("detailPage");
 
-  const detailTitle = document.getElementById("detailTitle");
-  const detailContent = document.getElementById("detailContent");
+  const detailTitle = document.getElementById("postTitle");
+  const detailContent = document.getElementById("postContent");
 
   //postId aus URL entnehmen und abspeichern
   const postId = matches[1];

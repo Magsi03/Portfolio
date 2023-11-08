@@ -89,9 +89,11 @@ input[type="submit"] {
 /* Suchergebnisse */
 .result-item {
   border-bottom: 1px solid #cccccc;
-  padding: 3px 0;
+  padding: 10px;
+  padding-bottom: 30px;
   transition: background-color 0.3s ease;
   cursor: pointer;
+
 }
 
 .result-item:hover {
@@ -101,18 +103,8 @@ input[type="submit"] {
 .result-title {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   text-decoration: underline;
-}
-
-.result-description {
-  font-size: 14px;
-  color: #555555;
-}
-
-
-.result-container {
-  grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
 }
 
 /* Fehlermeldungs-Container */
@@ -133,29 +125,35 @@ input[type="submit"] {
 
 /* Detailseite */
 /*Posts*/
-#detailTitle {
-  font-size: 25px;
-  font-weight: bold;
-  margin-top: 50px;
-  margin-bottom: 5px;
+
+#postContainer {
+  padding: 10px;
+  padding-top: 35px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  width: fit-content;
-
+  background-color: rgba(245, 245, 245, 0.5);
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
-#detailContent {
-  padding: 10px;
-  max-width: 800px; /* Passe die maximale Breite nach Bedarf an */
+#postTitle {
+  font-size: 25px;
+  font-weight: bold;
+  margin: 5px auto;
+  width: fit-content;
+  text-align: center;
+}
+
+#postContent {
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-
-  
 }
 
 /* Footer */
 footer {
-position: relative;
+  position: relative;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 5px 10px;
@@ -199,7 +197,7 @@ position: relative;
   padding-bottom: 50px;
 }
 
-#searchPage{
+#searchPage {
   padding-bottom: 50px;
 }
 
@@ -218,23 +216,32 @@ position: relative;
 }
 
 @media screen and (min-width: 1024px) {
+
+  #detailContainer {
+    padding: 35px;
+    padding-top: 50px;
+  }
+
   .result-item {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
   }
+
   .comment-item {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
   }
+
   #detailPage {
     padding-bottom: 150px;
   }
-  
-  #searchPage{
+
+  #searchPage {
     padding-bottom: 150px;
   }
+
   footer {
     position: fixed;
     bottom: 0;
@@ -243,6 +250,7 @@ position: relative;
     font-size: 16px;
 
   }
+
   .result-title {
     text-decoration: none;
   }
@@ -254,7 +262,7 @@ position: relative;
   }
 
   .blog-icon img {
-    width: 80px; 
+    width: 80px;
     height: auto;
     background-color: transparent;
   }
