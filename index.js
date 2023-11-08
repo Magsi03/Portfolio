@@ -106,9 +106,6 @@ async function searchPage(searchTerm) {
   }
 }
 
-
-// ...
-
 // Funktion für die Detailseite
 async function detailPage(matches) {
   console.log("detailPage aufgerufen");
@@ -145,7 +142,8 @@ async function detailPage(matches) {
 
     // Schleife über die Kommentare
     for (const comment of comments) {
-      // Anfrage an die Benutzerdaten hinzufügen
+      
+      // Anfrage an die Benutzerdaten 
       const userResponse = await fetch(
         `https://dummyjson.com/users/filter?key=username&value=${comment.user.username}`
       );
@@ -192,8 +190,6 @@ async function detailPage(matches) {
     showDetailError("❗️ Fehler beim Abrufen der Detaildaten ❗️", error);
   }
 }
-
-// ...
 
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
