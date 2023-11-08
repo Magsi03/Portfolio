@@ -39,6 +39,7 @@ p {
   margin: 20px;
 }
 
+
 /*Buttons*/
 .button {
   display: inline-block;
@@ -60,6 +61,7 @@ p {
 .button:focus {
   outline: none;
 }
+
 
 /* Suchformular */
 form {
@@ -107,21 +109,6 @@ input[type="submit"] {
   text-decoration: underline;
 }
 
-/* Fehlermeldungs-Container */
-#errorContainer,
-#detailErrorContainer {
-  display: none;
-  color: red;
-  font-weight: bold;
-  margin-top: 50px;
-  padding: 10px;
-  padding-top: 0;
-  background-color: #f5f5f5;
-  border-radius: 5px;
-  width: 60%;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 /* Detailseite */
 /*Posts*/
@@ -151,22 +138,6 @@ input[type="submit"] {
   margin-right: auto;
 }
 
-/* Footer */
-footer {
-  position: relative;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px 10px;
-  text-align: center;
-  color: #fff;
-  font-size: 12px;
-  line-height: 0.1;
-  margin-top: 10px;
-  z-index: 999;
-  box-sizing: border-box;
-
-}
-
 
 /*Kommentare*/
 .comment-item {
@@ -193,6 +164,40 @@ footer {
   border-radius: 5px;
 }
 
+
+/* Fehlermeldungs-Container */
+#errorContainer,
+#detailErrorContainer {
+  display: none;
+  color: red;
+  font-weight: bold;
+  margin-top: 50px;
+  padding: 10px;
+  padding-top: 0;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* Footer */
+footer {
+  position: relative;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 0.1;
+  margin-top: 10px;
+  z-index: 999;
+  box-sizing: border-box;
+}
+
+/*Seiten*/
 #detailPage {
   padding-bottom: 50px;
 }
@@ -201,6 +206,8 @@ footer {
   padding-bottom: 50px;
 }
 
+
+/*blog-icon nur auf großen Bildschirmen*/
 .mobile-view {
   min-height: 100vh;
   display: flex;
@@ -215,17 +222,51 @@ footer {
   display: none;
 }
 
+/*Hinweistext nach Suchanfrage ausblenden (durch Suchergebnisse ersetzen)*/
+#hintTextContainer {
+  display: block;
+}
+
+#Hinweistext,
+#untererText {
+  display: none;
+}
+
+
+/*Anpassung für große Bildschirme*/
 @media screen and (min-width: 1024px) {
 
-  #detailContainer {
-    padding: 35px;
-    padding-top: 50px;
+  .blog-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 50px;
+  }
+
+  .blog-icon img {
+    width: 80px;
+    height: auto;
+    background-color: transparent;
+  }
+
+  h1 {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
   }
 
   .result-item {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .result-title {
+    text-decoration: none;
+  }
+  
+  #detailContainer {
+    padding: 35px;
+    padding-top: 50px;
   }
 
   .comment-item {
@@ -250,35 +291,4 @@ footer {
     font-size: 16px;
 
   }
-
-  .result-title {
-    text-decoration: none;
-  }
-
-  .blog-icon {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 50px;
-  }
-
-  .blog-icon img {
-    width: 80px;
-    height: auto;
-    background-color: transparent;
-  }
-
-  h1 {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
-  }
-}
-
-#hintTextContainer {
-  display: block;
-}
-
-#Hinweistext,
-#untererText {
-  display: none;
 }
