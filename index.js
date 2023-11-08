@@ -107,7 +107,7 @@ async function searchPage(searchTerm) {
   }
 }
 
-// funktion für die Detailseite
+// Funktion für die Detailseite
 async function detailPage(matches) {
 
   console.log("detailPage aufgerufen");
@@ -134,41 +134,59 @@ async function detailPage(matches) {
       <p></p>
     `;
 
-    // Laden der Kommentare
-    const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
-    const commentsData = await commentsResponse.json();
-    const comments = commentsData.comments;
+   // Laden der Kommentare
+const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
+const commentsData = await commentsResponse.json();
+console.log(commentsData);
+const comments = commentsData.comments;
+const commentList = document.getElementById("commentList");
 
-    console.log(commentsData);
-    console.log(comments);
+// Array für die asynchronen Anfragen an die Benutzerdaten
+const userPromises = [];
 
-    //wenn der Post Kommentare hat, die Kommentare anzeigen
-    if (comments.length > 0) {
+// Schleife über die Kommentare
+comments.forEach((comment) => {
+  // Anfrage an die Benutzerdaten hinzufügen
+  const userPromise = fetch(`https://dummyjson.com/users/filter?key=username&value=${comment.user.username}`)
+    .then(response => response.json())
+    .then(userData => {
+      console.log(userData);
 
-      const commentList = document.getElementById("commentList");
-      commentList.innerHTML = "";
-
-      comments.forEach((comment) => {
+      // Überprüfen, ob ein Benutzer gefunden wurde
+      if (userData) {
+        console.log(userData.image);
+        // Kommentar-Element erstellen
         const commentItem = document.createElement("li");
         commentItem.classList.add("comment-item");
-        commentItem.innerHTML = `
-      <p>Kommentar ${comment.id}:</p>
-      <p> ${comment.body}</p>
-      <p>von: ${comment.user.username}</p>
-      `;
+
+        // Benutzerbild erstellen und hinzufügen
+        const userImage = document.createElement("img");
+        userImage.src = userData.image;
+        userImage.alt = "Benutzerbild";
+        commentItem.appendChild(userImage);
+
+        // Kommentar-Text erstellen und hinzufügen
+        const commentText = document.createElement("p");
+        commentText.textContent = comment.body;
+        commentItem.appendChild(commentText);
+
+        // Kommentar-Element zur Liste hinzufügen
         commentList.appendChild(commentItem);
-      });
+      } else {
+        // Wenn kein Benutzer gefunden wurde, eine Meldung anzeigen
+        const noUserImage = document.createElement("p");
+        noUserImage.textContent = "Kein Benutzerbild verfügbar";
+        commentList.appendChild(noUserImage);
+      }
+    });
+
+  // Anfrage zur Liste der asynchronen Anfragen hinzufügen
+  userPromises.push(userPromise);
+});
+
+// Auf das Ergebnis aller asynchronen Anfragen warten
+await Promise.all(userPromises);
     
-      // wenn der Post keine Kommentare hat: Infotext
-    } else {
-      const commentList = document.getElementById("commentList");
-      commentList.innerHTML = "";
-
-      const noCommentsMessage = document.createElement("p");
-      noCommentsMessage.textContent = "Dieser Post hat keine Kommentare 😕";
-      commentList.appendChild(noCommentsMessage);
-    }
-
   } catch (error) {
     showDetailError("❗️ Fehler beim Abrufen der Detaildaten ❗️", error);
   }
