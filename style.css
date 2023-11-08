@@ -164,6 +164,10 @@ input[type="submit"] {
   border-radius: 5px;
 }
 
+.img-small {
+  width: 100px;
+  height: 100px;
+}
 
 /* Fehlermeldungs-Container */
 #errorContainer,

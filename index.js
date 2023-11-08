@@ -1,4 +1,4 @@
-//Router konfigurieren und starten
+// Router konfigurieren und starten
 window.addEventListener("load", () => {
   const searchForm = document.getElementById("searchForm");
   const hintTextContainer = document.getElementById("hintTextContainer");
@@ -16,7 +16,8 @@ window.addEventListener("load", () => {
     }
   });
 
-  const router = new Router([{
+  const router = new Router([
+    {
       url: "^/$",
       show: () => searchPage(""),
     },
@@ -30,13 +31,12 @@ window.addEventListener("load", () => {
 
   // Initial anzeigen
   hintTextContainer.style.display = "block";
-hinweisText.style.display="block";
+  hinweisText.style.display = "block";
   untererText.style.display = "block";
-
 });
 
 
-//Funktion um zur Detailseite zu navigieren
+// Funktion um zur Detailseite zu navigieren
 function navigateToDetail(id) {
   location.hash = `/detail/${id}`;
 }
@@ -44,38 +44,38 @@ function navigateToDetail(id) {
 
 // Alle <section> ausblenden und die <section> mit der übergebenen ID anzeigen.
 // @param {string} idVisible ID der anzuzeigenden <section> 
-
 function switchVisibleSection(idVisible) {
-  document.querySelectorAll("section").forEach(section => section.classList.add("hidden"));
+  document.querySelectorAll("section").forEach((section) => {
+    section.classList.add("hidden");
+  });
 
   let sectionElement = document.getElementById(idVisible);
   if (sectionElement) sectionElement.classList.remove("hidden");
 }
 
 
-//Funktion für die Suchseite (Startseite)
+// Funktion für die Suchseite (Startseite)
 async function searchPage(searchTerm) {
-
   console.log("Suchseite aufgerufen");
   switchVisibleSection("searchPage");
 
-  //prüfen ob ein Suchbegriff eingegeben wurde
+  // Prüfen ob ein Suchbegriff eingegeben wurde
   if (!searchTerm) return;
 
-  //Suchergebnis- und Fehler-Container erstellen
+  // Suchergebnis- und Fehler-Container erstellen
   const searchResultsContainer = document.getElementById("searchResults");
   const errorContainer = document.getElementById("errorContainer");
 
   try {
+    searchResultsContainer.innerHTML = ""; // Vorherige Suchergebnisse entfernen
 
-    searchResultsContainer.innerHTML = ""; //vorherige Suchergebnisse entfernen
-
-    //fetchen, in API suchen
-    const response = await fetch(`https://dummyjson.com/posts/search?q=${searchTerm}`);
+    // Fetchen, in API suchen
+    const response = await fetch(
+      `https://dummyjson.com/posts/search?q=${searchTerm}`
+    );
     const data = await response.json();
 
     if (data?.posts?.length > 0) {
-
       errorContainer.innerHTML = ""; // Fehlercontainer leeren
       errorContainer.style.display = "none"; // Fehlercontainer ausblenden
 
@@ -98,7 +98,6 @@ async function searchPage(searchTerm) {
 
         searchResultsContainer.appendChild(resultItem);
       });
-
     } else {
       showError("Keine Ergebnisse gefunden  😕");
     }
@@ -107,91 +106,94 @@ async function searchPage(searchTerm) {
   }
 }
 
+
+// ...
+
 // Funktion für die Detailseite
 async function detailPage(matches) {
-
   console.log("detailPage aufgerufen");
   switchVisibleSection("detailPage");
 
   const detailTitle = document.getElementById("postTitle");
   const detailContent = document.getElementById("postContent");
+  const commentList = document.getElementById("commentList");
 
-  //postId aus URL entnehmen und abspeichern
+  // PostId aus URL entnehmen und abspeichern
   const postId = matches[1];
 
   try {
-    //Post laden
+    // Post laden
     const postResponse = await fetch(`https://dummyjson.com/posts/${postId}`);
     const postData = await postResponse.json();
 
-    //Post anzeigen
-    detailTitle.textContent = "Post "+ postData.id +": " + postData.title;
+    // Post anzeigen
+    detailTitle.textContent = "Post " + postData.id + ": " + postData.title;
     detailContent.innerHTML = `
-    <p>${postData.body}</p>
+      <p>${postData.body}</p>
       <p>Tags: ${postData.tags.join(", ")}</p>
       <p>Nutzer-ID: ${postData.userId}</p>
       <p>Reaktionen: ${postData.reactions}</p>
-      <p></p>
     `;
 
-   // Laden der Kommentare
-const commentsResponse = await fetch(`https://dummyjson.com/posts/${postId}/comments`);
-const commentsData = await commentsResponse.json();
-console.log(commentsData);
-const comments = commentsData.comments;
-const commentList = document.getElementById("commentList");
+    // Laden der Kommentare
+    const commentsResponse = await fetch(
+      `https://dummyjson.com/posts/${postId}/comments`
+    );
+    const commentsData = await commentsResponse.json();
+    console.log(commentsData);
+    const comments = commentsData.comments;
 
-// Array für die asynchronen Anfragen an die Benutzerdaten
-const userPromises = [];
-
-// Schleife über die Kommentare
-comments.forEach((comment) => {
-  // Anfrage an die Benutzerdaten hinzufügen
-  const userPromise = fetch(`https://dummyjson.com/users/filter?key=username&value=${comment.user.username}`)
-    .then(response => response.json())
-    .then(userData => {
+    // Schleife über die Kommentare
+    for (const comment of comments) {
+      // Anfrage an die Benutzerdaten hinzufügen
+      const userResponse = await fetch(
+        `https://dummyjson.com/users/filter?key=username&value=${comment.user.username}`
+      );
+      const userData = await userResponse.json();
       console.log(userData);
 
-      // Überprüfen, ob ein Benutzer gefunden wurde
-      if (userData) {
-        console.log(userData.image);
-        // Kommentar-Element erstellen
-        const commentItem = document.createElement("li");
-        commentItem.classList.add("comment-item");
+      // Kommentar-Element erstellen
+      const commentItem = document.createElement("li");
+      commentItem.classList.add("comment-item");
 
-        // Benutzerbild erstellen und hinzufügen
+      // Kommentar-ID anzeigen
+      const commentId = document.createElement("p");
+      commentId.textContent = `Kommentar ${comment.id}:`;
+      commentItem.appendChild(commentId);
+
+      // Kommentartext anzeigen
+      const commentText = document.createElement("p");
+      commentText.textContent = comment.body;
+      commentItem.appendChild(commentText);
+
+      // Benutzername anzeigen
+      const username = document.createElement("p");
+      username.textContent = `User: ${comment.user.username}`;
+      commentItem.appendChild(username);
+
+      // Benutzerbild anzeigen, wenn verfügbar
+      if (userData.users.length > 0 && userData.users[0].image) {
         const userImage = document.createElement("img");
-        userImage.src = userData.image;
+        userImage.src = userData.users[0].image;
         userImage.alt = "Benutzerbild";
+        userImage.classList.add("img-small");
         commentItem.appendChild(userImage);
-
-        // Kommentar-Text erstellen und hinzufügen
-        const commentText = document.createElement("p");
-        commentText.textContent = comment.body;
-        commentItem.appendChild(commentText);
-
-        // Kommentar-Element zur Liste hinzufügen
-        commentList.appendChild(commentItem);
       } else {
-        // Wenn kein Benutzer gefunden wurde, eine Meldung anzeigen
+        // Wenn kein Benutzerbild gefunden wurde, eine Meldung anzeigen
         const noUserImage = document.createElement("p");
         noUserImage.textContent = "Kein Benutzerbild verfügbar";
-        commentList.appendChild(noUserImage);
+        commentItem.appendChild(noUserImage);
       }
-    });
 
-  // Anfrage zur Liste der asynchronen Anfragen hinzufügen
-  userPromises.push(userPromise);
-});
-
-// Auf das Ergebnis aller asynchronen Anfragen warten
-await Promise.all(userPromises);
-    
+      // Kommentar-Element zur Liste hinzufügen
+      commentList.appendChild(commentItem);
+    }
   } catch (error) {
     showDetailError("❗️ Fehler beim Abrufen der Detaildaten ❗️", error);
   }
 }
 
+// ...
 
 // Funktion zum Anzeigen des Fehlercontainers
 function showError(message, error) {
@@ -204,17 +206,13 @@ function showError(message, error) {
   errorContainer.appendChild(errorText);
 
   // Fehlercontainer ein- oder ausblenden
-  if (message) {
-    errorContainer.style.display = "block";
-  } else {
-    errorContainer.style.display = "none";
-  }
+  errorContainer.style.display = message ? "block" : "none";
 }
 
-
-//Funktion zum Anzeigen des Detailfehler-Containers
-function showDetailError(message, error){
-const detailErrorContainer = document.getElementById("detailErrorContainer");
+// Funktion zum Anzeigen des Detailfehler-Containers
+function showDetailError(message, error) {
+  console.error("Fehler:", message, error);
+  const detailErrorContainer = document.getElementById("detailErrorContainer");
   const errorText = document.createElement("p");
   errorText.textContent = message;
 
@@ -222,9 +220,5 @@ const detailErrorContainer = document.getElementById("detailErrorContainer");
   detailErrorContainer.appendChild(errorText);
 
   // Fehlercontainer ein- oder ausblenden
-  if (message) {
-    detailErrorContainer.style.display = "block";
-  } else {
-    detailErrorContainer.style.display = "none";
-  }
+  detailErrorContainer.style.display = message ? "block" : "none";
 }
