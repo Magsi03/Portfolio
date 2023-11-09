@@ -140,51 +140,60 @@ async function detailPage(matches) {
     console.log(commentsData);
     const comments = commentsData.comments;
 
+    // Vorhandene Kommentare aus der commentList entfernen
+    commentList.innerHTML = "";
+
     // Schleife über die Kommentare
-    for (const comment of comments) {
-      
-      // Anfrage an die Benutzerdaten 
-      const userResponse = await fetch(
-        `https://dummyjson.com/users/filter?key=username&value=${comment.user.username}`
-      );
-      const userData = await userResponse.json();
-      console.log(userData);
+    if (comments.length > 0) {
+      for (const comment of comments) {
+        // Anfrage an die Benutzerdaten hinzufügen
+        const userResponse = await fetch(
+          `https://dummyjson.com/users/filter?key=username&value=${comment.user.username}`
+        );
+        const userData = await userResponse.json();
+        console.log(userData);
 
-      // Kommentar-Element erstellen
-      const commentItem = document.createElement("li");
-      commentItem.classList.add("comment-item");
+        // Kommentar-Element erstellen
+        const commentItem = document.createElement("li");
+        commentItem.classList.add("comment-item");
 
-      // Kommentar-ID anzeigen
-      const commentId = document.createElement("p");
-      commentId.textContent = `Kommentar ${comment.id}:`;
-      commentItem.appendChild(commentId);
+        // Kommentar-ID anzeigen
+        const commentId = document.createElement("p");
+        commentId.textContent = `Kommentar ${comment.id}:`;
+        commentItem.appendChild(commentId);
 
-      // Kommentartext anzeigen
-      const commentText = document.createElement("p");
-      commentText.textContent = comment.body;
-      commentItem.appendChild(commentText);
+        // Kommentartext anzeigen
+        const commentText = document.createElement("p");
+        commentText.textContent = comment.body;
+        commentItem.appendChild(commentText);
 
-      // Benutzername anzeigen
-      const username = document.createElement("p");
-      username.textContent = `User: ${comment.user.username}`;
-      commentItem.appendChild(username);
+        // Benutzername anzeigen
+        const username = document.createElement("p");
+        username.textContent = `User: ${comment.user.username}`;
+        commentItem.appendChild(username);
 
-      // Benutzerbild anzeigen, wenn verfügbar
-      if (userData.users.length > 0 && userData.users[0].image) {
-        const userImage = document.createElement("img");
-        userImage.src = userData.users[0].image;
-        userImage.alt = "Benutzerbild";
-        userImage.classList.add("userImg");
-        commentItem.appendChild(userImage);
-      } else {
-        // Wenn kein Benutzerbild gefunden wurde, eine Meldung anzeigen
-        const noUserImage = document.createElement("p");
-        noUserImage.textContent = "Kein Benutzerbild verfügbar";
-        commentItem.appendChild(noUserImage);
+        // Benutzerbild anzeigen, wenn verfügbar
+        if (userData.users.length > 0 && userData.users[0].image) {
+          const userImage = document.createElement("img");
+          userImage.src = userData.users[0].image;
+          userImage.alt = "Benutzerbild";
+          userImage.classList.add("userImg");
+          commentItem.appendChild(userImage);
+        } else {
+          // Wenn kein Benutzerbild gefunden wurde, eine Meldung anzeigen
+          const noUserImage = document.createElement("p");
+          noUserImage.textContent = "Kein Benutzerbild verfügbar";
+          commentItem.appendChild(noUserImage);
+        }
+
+        // Kommentar-Element zur Liste hinzufügen
+        commentList.appendChild(commentItem);
       }
-
-      // Kommentar-Element zur Liste hinzufügen
-      commentList.appendChild(commentItem);
+    } else {
+      // Wenn keine Kommentare verfügbar sind, eine Meldung anzeigen
+      const noCommentsMessage = document.createElement("p");
+      noCommentsMessage.textContent = "Dieser Post hat keine Kommentare";
+      commentList.appendChild(noCommentsMessage);
     }
   } catch (error) {
     showDetailError("❗️ Fehler beim Abrufen der Detaildaten ❗️", error);
